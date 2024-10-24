@@ -1,5 +1,7 @@
 import { defineComponent, onMounted, ref, reactive, computed, Ref } from "vue"
 
+import data from "./demo.json"
+
 
 export const Row = defineComponent({
   props: {
@@ -24,8 +26,6 @@ export type ItemResize = Readonly<[index: number, size: number]>;
 export const App = defineComponent({
   setup() {
     const tableRef = ref() as Ref<HTMLElement>
-    const start = ref(0)
-    const end = ref(20)
 
     const offset = ref(0)
 
@@ -37,7 +37,6 @@ export const App = defineComponent({
       estimatedSize: 60,
       length: 10000
     })
-
 
     const height = computed(() => {
       if (!cache.length) return 0;
@@ -52,7 +51,28 @@ export const App = defineComponent({
     })
 
     const range = computed(() => {
+      let start = 0;
+      let offsetWidth = 0;
+      let diff = 0;
+      while (offsetWidth < offset.value) {
+        const new_val = cache.sizes[start];
+        diff = offset.value - offsetWidth;
+        start += 1;
+        offsetWidth += new_val !== undefined ? new_val : cache.estimatedSize;
+      }
+      start += diff / (cache.sizes[start - 1] || cache.estimatedSize);
 
+      start = Math.floor(Math.max(0, start - 1))
+
+      let w = 0
+      let end = start
+      while (w < cache.viewport) {
+        const new_val = cache.sizes[start + end] || cache.estimatedSize;
+        w += new_val
+        end += 1
+      }
+      console.log(start, end, cache.sizes)
+      return [start, end + 1]
     })
 
 
@@ -89,14 +109,14 @@ export const App = defineComponent({
     }
 
     function onScroll(event) {
-      // event.stopPropagation();
+      event.stopPropagation();
+      offset.value = event.target.scrollTop
 
-      console.log(2)
     }
 
     function onWheel(event) {
-      event.preventDefault();
-      console.log(1)
+      // event.preventDefault();
+      // console.log(1)
     }
 
     onMounted(() => {
@@ -109,16 +129,19 @@ export const App = defineComponent({
     return () => {
       const Rows = []
 
-      for (let index = start.value; index < end.value; index++) {
-        Rows.push(<Row observer={observeItem} index={index}>{index}</Row>)
+      const [start, end] = range.value
+
+      for (let index = start; index < end; index++) {
+        Rows.push(<Row observer={observeItem} index={index}>{index}.{data[index].user_name}</Row>)
       }
 
       return (
         <div class="table" ref={tableRef}>
           <div class="table-virtual-panel" style={{ height: height.value + 'px' }}>
-            <div>{Rows}</div>
           </div>
-          <div class="table-scroll-clip"></div>
+          <div class="table-scroll-clip">
+            {Rows}
+          </div>
         </div>
       )
     }

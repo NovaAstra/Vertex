@@ -1,6 +1,6 @@
 .table {
   width: 500px;
-  height: 400px;
+  height: 300px;
   position: relative;
   scrollbar-width: thin;
   outline: none;
@@ -10,13 +10,17 @@
 }
 
 .table-virtual-panel {
+  top: 0;
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
+
 }
 
 .table-scroll-clip {
+  top: 0;
+  left: 0;
   position: sticky;
   contain: strict;
   overflow-anchor: none;
@@ -25,11 +29,13 @@
 }
 
 .row:nth-child(odd) {
-  height: 30px;
   background-color: rgb(136, 136, 223);
 }
 
 .row:nth-child(even) {
-  height: 30px;
   background-color: rgb(212, 150, 150);
+}
+
+.row{
+  word-wrap: break-word;
 }
