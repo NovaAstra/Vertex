@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-      "demo": "pnpm --filter example1 dev"
+      "example1": "pnpm --filter example1 dev"
   },
   "devDependencies": {
       "@types/node": "^22.2.0",
