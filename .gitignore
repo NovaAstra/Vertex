@@ -1,0 +1,28 @@
+# pnpm
+.pnpm-store
+
+# dependencies
+node_modules
+
+# compiled
+lib
+dist
+build
+coverage
+
+# misc
+.DS_Store
+.vscode
+.idea
+
+# debug
+logs
+*.log
+
+# typescript
+*.tsbuildinfo
+
+# dotenv environment variables file
+.env
+.env.*
+!.env.example
