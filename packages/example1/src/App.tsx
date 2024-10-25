@@ -1,4 +1,4 @@
-import { defineComponent, onMounted, ref, reactive, computed, Ref } from "vue"
+import { defineComponent, onMounted, ref, reactive, computed, Ref, onBeforeUnmount } from "vue"
 
 import data from "./demo.json"
 
@@ -6,6 +6,7 @@ import data from "./demo.json"
 export const Row = defineComponent({
   props: {
     observer: Function,
+    disItem: Function,
     index: Number
   },
   setup(props, { slots }) {
@@ -13,6 +14,10 @@ export const Row = defineComponent({
 
     onMounted(() => {
       props.observer(rowRef.value, props.index)
+    })
+
+    onBeforeUnmount(() => {
+      props.disItem(rowRef.value)
     })
 
     return () => (
@@ -51,12 +56,13 @@ export const App = defineComponent({
     })
 
     const range = computed(() => {
+      let cc = offset.value
       let start = 0;
       let offsetWidth = 0;
       let diff = 0;
-      while (offsetWidth < offset.value) {
+      while (offsetWidth < cc) {
         const new_val = cache.sizes[start];
-        diff = offset.value - offsetWidth;
+        diff = cc - offsetWidth;
         start += 1;
         offsetWidth += new_val !== undefined ? new_val : cache.estimatedSize;
       }
@@ -67,11 +73,12 @@ export const App = defineComponent({
       let w = 0
       let end = start
       while (w < cache.viewport) {
-        const new_val = cache.sizes[start + end] || cache.estimatedSize;
+        const new_val = cache.sizes[end] || cache.estimatedSize;
         w += new_val
         end += 1
       }
-      console.log(start, end, cache.sizes)
+
+      console.log(cc, start, end + 1, cache.viewport, w)
       return [start, end + 1]
     })
 
@@ -86,6 +93,7 @@ export const App = defineComponent({
           cache.viewport = contentRect.height
         } else {
           const index = mountedIndexes.get(target);
+
           if (index != null) {
             resizes.push([index, contentRect.height]);
           }
@@ -96,7 +104,6 @@ export const App = defineComponent({
         const updated = resizes.filter(
           ([index, size]) => cache.sizes[index] !== size
         );
-
         for (const [index, size] of updated) {
           cache.sizes[index] = size || cache.estimatedSize
         }
@@ -106,6 +113,11 @@ export const App = defineComponent({
     const observeItem = (el: HTMLElement, i: number) => {
       mountedIndexes.set(el, i);
       observer.observe(el)
+
+    }
+
+    const disItem = (el: HTMLElement) => {
+      observer.unobserve(el)
     }
 
     function onScroll(event) {
@@ -131,8 +143,9 @@ export const App = defineComponent({
 
       const [start, end] = range.value
 
+
       for (let index = start; index < end; index++) {
-        Rows.push(<Row observer={observeItem} index={index}>{index}.{data[index].user_name}</Row>)
+        Rows.push(<Row observer={observeItem} disItem={disItem} index={index} key={index}>{index}.{data[index].user_name}</Row>)
       }
 
       return (
