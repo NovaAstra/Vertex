@@ -28,7 +28,6 @@ function onRequest(req, res) {
 
   const target = url.parse(targetUrl);
 
-  if(target.href === 'https://app.mspbots.ai/home'){
     const options = {
       hostname: target.hostname,
       port: 443,
@@ -58,9 +57,7 @@ function onRequest(req, res) {
     req.pipe(proxy, {
       end: true
     });
-  }else{
-    res.writeHead(200, { "Content-Type": "text/plain" });
-  }
+
 
  
 }
