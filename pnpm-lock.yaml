@@ -27,15 +27,14 @@ importers:
       '@vitejs/plugin-vue-jsx':
         specifier: ^4.0.1
         version: 4.0.1(vite@5.4.10(@types/node@22.7.9))(vue@3.5.12(typescript@5.6.3))
-      typescript:
-        specifier: ~5.6.2
-        version: 5.6.3
       vite:
         specifier: ^5.4.9
         version: 5.4.10(@types/node@22.7.9)
       vue-tsc:
         specifier: ^2.1.6
         version: 2.1.6(typescript@5.6.3)
+
+  packages/example2: {}
 
 packages:
 
