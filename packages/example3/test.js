@@ -8,23 +8,28 @@ const options = {
   cert: fs.readFileSync('./localhost.pem'), // 证书路径
 };
 
+const port = 3007;
 
-const port = 3001;
+const server = https.createServer(options,onRequest);
 
-const server = https.createServer(options);
-
-server.on("request", onRequest)
-// 1.创建代理服务
 server.listen(port, () => {
-  console.log(`Proxy server is listening on port ${port}`);
+  console.log(`Server is running on https://localhost:${port}`);
 });
+
 
 
 function onRequest(req, res) {
   const originUrl = url.parse(req.url);
   const qs = querystring.parse(originUrl.query);
-  const targetUrl = qs["target"] || '';
+  const targetUrl = qs["target"];
  
+  if (!targetUrl) {
+    console.log(targetUrl)
+    res.writeHead(200, { "Content-Type": "text/plain" });
+    res.end("Bad Request: Missing target URL");
+    return;
+  }
+
 
   const target = url.parse(targetUrl);
 
@@ -37,27 +42,27 @@ function onRequest(req, res) {
       rejectUnauthorized: false
     };
   
-    // 2.代发请求
+
     const proxy = https.request(options, _res => {
-      // 3.修改响应头
+   
       const fieldsToRemove = ["x-frame-options", "content-security-policy"];
       Object.keys(_res.headers).forEach(field => {
         if (!fieldsToRemove.includes(field.toLocaleLowerCase())) {
           res.setHeader(field, _res.headers[field]);
         }
       });
+      // res.writeHead(_res.statusCode);
       _res.pipe(res, { end: true });
     });
   
     proxy.on("error", err => {
       console.error("Proxy error:", err);
-    
+      res.writeHead(502, { "Content-Type": "text/plain" });
+      res.end("Bad Gateway");
     });
   
     req.pipe(proxy, {
       end: true
     });
-
-
  
 }

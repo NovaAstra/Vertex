@@ -9,10 +9,14 @@
 
 <body>
   
-    <iframe  style="width: 400px; height: 300px;" src="https://localhost:3001/?target=https%3A%2F%2Fgithub.com%2F" />
 
     <script>
-        console.log(document.querySelector('iframe').contentWindow)
+
+        let iframe  = document.createElement("iframe")
+        iframe.src = "https://localhost:3007?target=https%3A%2F%2Fappint.mspbots.ai"
+        console.log(iframe.contentWindow)
+
+        document.body.appendChild(iframe)
     </script>
 </body>
 
