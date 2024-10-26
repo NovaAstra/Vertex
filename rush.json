@@ -4,10 +4,5 @@
   "pnpmVersion": "9.12.2",
   "nodeSupportedVersionRange": ">=20",
   "ensureConsistentVersions": true,
-  "projects": [
-    {
-      "packageName": "@example/vue",
-      "projectFolder": "examples/vue"
-    }
-  ]
+  "projects": []
 }
