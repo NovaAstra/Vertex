@@ -11,7 +11,7 @@ build
 coverage
 
 # rush-specific
-/common/temp
+common/temp
 common/autoinstallers/*/.npmrc
 **/.rush
 
