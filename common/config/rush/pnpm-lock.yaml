@@ -10,6 +10,10 @@ importers:
 
   .: {}
 
+  ../../components/gridify: {}
+
+  ../../components/tabula: {}
+
   ../../configs/eslint: {}
 
   ../../configs/tsconfig:

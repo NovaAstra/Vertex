@@ -18,6 +18,10 @@
       "projectFolder": "components/gridify"
     },
     {
+      "packageName": "@vertex/tabula",
+      "projectFolder": "components/tabula"
+    },
+    {
       "packageName": "@vertex/packify",
       "projectFolder": "plugins/packify"
     }
