@@ -4,5 +4,14 @@
   "pnpmVersion": "9.12.2",
   "nodeSupportedVersionRange": ">=20",
   "ensureConsistentVersions": true,
-  "projects": []
+  "projects": [
+    {
+      "packageName": "@vertex/eslint-config",
+      "projectFolder": "configs/eslint"
+    },
+    {
+      "packageName": "@vertex/ts-config",
+      "projectFolder": "configs/typescript"
+    }
+  ]
 }
