@@ -12,6 +12,10 @@
     {
       "packageName": "@vertex/ts-config",
       "projectFolder": "configs/tsconfig"
+    },
+    {
+      "packageName": "@vertex/packify",
+      "projectFolder": "plugins/packify"
     }
   ]
 }
