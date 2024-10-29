@@ -12,7 +12,7 @@ importers:
 
   ../../configs/eslint: {}
 
-  ../../configs/typescript:
+  ../../configs/tsconfig:
     dependencies:
       vite:
         specifier: ^5.4.10
