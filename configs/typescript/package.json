@@ -1,5 +1,45 @@
 {
     "name": "@vertex/ts-config",
+    "version": "0.0.1",
+    "private": false,
+    "license": "MIT",
     "type": "module",
-    "version": "0.0.1"
+    "archetype": {
+        "platform": "node",
+        "language": "ts",
+        "kind": "lib"
+    },
+    "scripts": {},
+    "keywords": [
+        "pnpm",
+        "rush",
+        "vertex",
+        "monorepo",
+        "tsconfig",
+        "typescript"
+    ],
+    "files": [
+        "bun.json",
+        "nuxt.json",
+        "tsconfig.json",
+        "vite.json",
+        "vitest.json",
+        "vue.json",
+        "web.json"
+    ],
+    "publishConfig": {
+        "access": "public"
+    },
+    "exports": {
+        "./base": "./base.json"
+    },
+    "peerDependencies": {
+        "typescript": "^5.6.3"
+    },
+    "tsconfig": "tsconfig.json",
+    "dependencies": {
+        "vitest": "^2.1.4",
+        "vite": "^5.4.10"
+    },
+    "devDependencies": {}
 }
