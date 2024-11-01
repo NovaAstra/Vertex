@@ -18,6 +18,10 @@
       "projectFolder": "packages/domify"
     },
     {
+      "packageName": "@vertex/finitio",
+      "projectFolder": "packages/finitio"
+    },
+    {
       "packageName": "@vertex/grabb",
       "projectFolder": "components/grabb"
     },
