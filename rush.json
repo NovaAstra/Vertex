@@ -14,6 +14,22 @@
       "projectFolder": "configs/tsconfig"
     },
     {
+      "packageName": "@vertex/domify",
+      "projectFolder": "packages/domify"
+    },
+    {
+      "packageName": "@vertex/grabb",
+      "projectFolder": "components/grabb"
+    },
+    {
+      "packageName": "@vertex/gridify",
+      "projectFolder": "components/gridify"
+    },
+    {
+      "packageName": "@vertex/tabula",
+      "projectFolder": "components/tabula"
+    },
+    {
       "packageName": "@vertex/packify",
       "projectFolder": "plugins/packify"
     }

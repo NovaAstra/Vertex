@@ -10,6 +10,12 @@ importers:
 
   .: {}
 
+  ../../components/grabb: {}
+
+  ../../components/gridify: {}
+
+  ../../components/tabula: {}
+
   ../../configs/eslint: {}
 
   ../../configs/tsconfig:
@@ -20,6 +26,8 @@ importers:
       vitest:
         specifier: ^2.1.4
         version: 2.1.4
+
+  ../../packages/domify: {}
 
   ../../plugins/packify: {}
 
