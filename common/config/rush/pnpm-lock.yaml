@@ -31,12 +31,9 @@ importers:
 
   ../../packages/finitio:
     dependencies:
-      fp-rosetree:
-        specifier: ~0.7.0
-        version: 0.7.0
-      vite:
-        specifier: ^5.4.10
-        version: 5.4.10
+      xstate:
+        specifier: ~5.18.2
+        version: 5.18.2
 
   ../../plugins/packify: {}
 
@@ -346,9 +343,6 @@ packages:
     resolution: {integrity: sha512-bFi65yM+xZgk+u/KRIpekdSYkTB5W1pEf0Lt8Q8Msh7b+eQ7LXVtIB1Bkm4fvclDEL1b2CZkMhv2mOeF8tMdkA==}
     engines: {node: '>=12.0.0'}
 
-  fp-rosetree@0.7.0:
-    resolution: {integrity: sha512-dxpuzvvyPAIkYnf9JPJ7r4ooijJR6mSuCMVqhYkYo77IPVQJTdcrbAggk8XRFXK3yDxpgDkyWlWGGlHyDsxUFA==}
-
   fsevents@2.3.3:
     resolution: {integrity: sha512-5xoDfX+fL7faATnagmWPpbFtwh/R77WmMMqqHGS65C3vvB0YHrgF+B1YmZ3441tMj5n63k0212XNoJwzlhffQw==}
     engines: {node: ^8.16.0 || ^10.6.0 || >=11.0.0}
@@ -483,6 +477,9 @@ packages:
     resolution: {integrity: sha512-hUrmaWBdVDcxvYqnyh09zunKzROWjbZTiNy8dBEjkS7ehEDQibXJ7XvlmtbwuTclUiIyN+CyXQD4Vmko8fNm8w==}
     engines: {node: '>=8'}
     hasBin: true
+
+  xstate@5.18.2:
+    resolution: {integrity: sha512-hab5VOe29D0agy8/7dH1lGw+7kilRQyXwpaChoMu4fe6rDP+nsHYhDYKfS2O4iXE7myA98TW6qMEudj/8NXEkA==}
 
 snapshots:
 
@@ -705,8 +702,6 @@ snapshots:
 
   expect-type@1.1.0: {}
 
-  fp-rosetree@0.7.0: {}
-
   fsevents@2.3.3:
     optional: true
 
@@ -836,3 +831,5 @@ snapshots:
     dependencies:
       siginfo: 2.0.0
       stackback: 0.0.2
+
+  xstate@5.18.2: {}

@@ -2,5 +2,8 @@
   "name": "@vertex/finitio",
   "type": "module",
   "main": "index.ts",
-  "version": "0.0.1"
+  "version": "0.0.1",
+  "dependencies": {
+    "xstate": "~5.18.2"
+  }
 }
