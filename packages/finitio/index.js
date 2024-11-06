@@ -69,3 +69,53 @@ const states = defineStates({
     Resolved: (data) => data,
     Rejected: (error) => error
 })
+
+function createFactoryMachine(states, transitions, init) {
+    const initialState = (
+        typeof init === "string" ? states[init]({}) : init
+    );
+    const machine = createStateMachine(transitions, initialState);
+    Object.assign(machine, {
+        states
+    })
+
+    return machine
+}
+
+function createApi(machine, filterStateKey) {
+    const { states, transitions } = machine;
+    const createSender =
+        (eventKey) =>
+            (...params) => {
+                return machine.send(eventKey, ...(params));
+            };
+
+    const events = {}
+    for (const stateKey in states) {
+        if (filterStateKey && stateKey !== filterStateKey) {
+            continue;
+        }
+
+        const transitioners = {}
+        const transitionKey = stateKey;
+        const stateTransitions = transitions[transitionKey];
+    }
+}
+
+function withApi(target) { }
+
+const trafficLight = createFactoryMachine(
+    {
+        Red: () => "means stop",
+        Yellow: () => "means caution",
+        Green: () => "means go",
+    },
+    {
+        Red: { next: "Green" },
+        Yellow: { next: "Red" },
+        Green: { next: "Yellow" },
+    },
+    'Red'
+)
+
+
