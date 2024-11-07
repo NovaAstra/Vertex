@@ -18,8 +18,20 @@
       "projectFolder": "packages/domify"
     },
     {
+      "packageName": "@vertex/elation",
+      "projectFolder": "packages/elation"
+    },
+    {
       "packageName": "@vertex/finitio",
       "projectFolder": "packages/finitio"
+    },
+    {
+      "packageName": "@vertex/match",
+      "projectFolder": "packages/match"
+    },
+    {
+      "packageName": "@vertex/typify",
+      "projectFolder": "packages/typify"
     },
     {
       "packageName": "@vertex/grabb",
