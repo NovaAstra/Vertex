@@ -1,0 +1,8 @@
+export type * from "./any"
+export type * from "./array"
+export type * from "./function"
+export type * from "./if"
+export type * from "./is"
+export type * from "./object"
+export type * from "./primitive"
+export type * from "./promise"
