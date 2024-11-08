@@ -12,3 +12,4 @@ export type ArrayTail<T extends readonly unknown[]> = T extends readonly []
     ? L
     : T
 
+export type ArrayLast<T extends AnyArray> = T[ArrayLength<ArrayTail<T>>]
