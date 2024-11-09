@@ -17,7 +17,10 @@ import type { Intrinsic } from "./internal/_intrinsic"
  * 
  * type A = { a: string | null, b: number | undefined };
  * type B = NonNullableFlat<A>;
- * => type B = { a: string; b: number; }
+ * => type B = { a: string; b: number; };
+ * 
+ * type C = NonNullableFlat<{ a?: string }>;
+ * => type C = { a?: string | undefined; };
  * ```
  */
 export type NonNullableFlat<T> = {

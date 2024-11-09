@@ -31,10 +31,20 @@ export type Fit<T1 extends any, T2 extends any> =
  * 
  * @template T
  * @return
+ * A type where each element of `T` is optional and can be `T[K]` or `Gap`.
  * 
  * @example
  * ```ts
  * import type {Gaps} from "@vertex/typify"
+ * 
+ * type A = Gaps<[string, number?]>;
+ * => type A = [string, (number | undefined)?];
+ * 
+ * type B = Gaps<string[]>;
+ * => type B = string[];
+ * 
+ * type C = Gaps<[string, undefined, number]>;
+ * => type C = [string, undefined, number]
  * ```
  */
 export type Gaps<T extends ImmutableArray> = Fit<NonNullableFlat<{
