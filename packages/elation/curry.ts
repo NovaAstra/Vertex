@@ -1,4 +1,14 @@
-export type Curried<T extends unknown[], R> = T extends [] ? R : ''
+import type { AnyFunction, ImmutableArray, RequiredIndices } from "@vertex/typify"
+
+export type Curried<T extends AnyFunction> =
+    <
+        P extends Parameters<T>,
+        N extends ImmutableArray,
+        R extends any = ReturnType<T>
+    >(...args: P | Parameters<T>) =>
+        RequiredIndices<N> extends never
+        ? R
+        : Curried<(...args: N) => R>
 
 // export function curry<T extends unknown[], R>(
 //     fn: (...args: T) => R,

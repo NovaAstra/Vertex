@@ -2,5 +2,8 @@
   "name": "@vertex/elation",
   "type": "module",
   "main": "index.ts",
-  "version": "0.0.1"
+  "version": "0.0.1",
+  "devDependencies": {
+    "@vertex/typify": "workspace:*"
+  }
 }

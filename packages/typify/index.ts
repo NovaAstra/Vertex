@@ -1,5 +1,6 @@
-export type * from "./any"
 export type * from "./array"
+export type * from "./basic"
+export type * from "./class"
 export type * from "./function"
 export type * from "./if"
 export type * from "./is"

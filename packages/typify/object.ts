@@ -1,3 +1,5 @@
+import type { Intrinsic } from "./internal/_intrinsic"
+
 /**
  * Creates a new type by making all properties of the input type non-nullable 
  * and then flattening them.
@@ -21,6 +23,19 @@
 export type NonNullableFlat<T> = {
     [K in keyof T]: NonNullable<T[K]>
 } & {}
+
+/**
+ * @category Object
+ * 
+ * @example
+ * ```ts
+ * ```
+ */
+export type NonNullableDeep<T> = {
+    [K in keyof T]: T[K] extends Intrinsic
+    ? T[K]
+    : NonNullableDeep<NonNullable<T[K]>>
+}
 
 /**
  * @category Object
@@ -57,11 +72,13 @@ export type OptionalKeys<T> = T extends object
  * ```ts
  * import type {RequiredKeys} from "@vertex/typify"
  * 
- * type A = { a?: number, b: string };
- * type B = OptionalKeys<A>;
- * => type B = "b"
+ * type A = RequiredKeys<{ a?: number, b: string }>;
+ * => type A = "b";
+ * 
+ * type B = RequiredKeys<{ a?: number, b?: string }>;
+ * => type B = never;
  * ```
  */
-export type RequiredObjectKeys<T> = T extends unknown
+export type RequiredKeys<T> = T extends unknown
     ? Exclude<keyof T, OptionalKeys<T>>
     : never;

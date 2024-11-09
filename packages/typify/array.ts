@@ -1,4 +1,4 @@
-import type { RequiredObjectKeys } from "./object"
+import type { RequiredKeys } from "./object"
 
 /**
  * An immutable array is an array that cannot be modified after it is created.
@@ -142,14 +142,14 @@ export type ObjectOf<T extends ImmutableArray> =
  * 
  * @example
  * ```ts
- * import type {RequiredArrayKeys} from "@vertex/typify"
+ * import type {RequiredIndices} from "@vertex/typify"
  * 
- * type A = RequiredArrayKeys<[string, number, symbol?]>;
+ * type A = RequiredIndices<[string, number, symbol?]>;
  * => type A = "0" | "1";
  * 
- * type B = RequiredArrayKeys<(string | number)[]>;
+ * type B = RequiredIndices<(string | number)[]>;
  * => type B = number;
  * ```
  */
-export type RequiredArrayKeys<T extends ImmutableArray> =
-    RequiredObjectKeys<ObjectOf<T>>
+export type RequiredIndices<T extends ImmutableArray> =
+    RequiredKeys<ObjectOf<T>>
