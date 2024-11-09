@@ -1,2 +1,4 @@
-export type AnyFunction<T extends ReadonlyArray<unknown> = unknown[], R = unknown> = (...args: T) => R;
+import type { ImmutableArray } from "./array"
+
+export type AnyFunction<T extends ImmutableArray = any[], R = any> = (...args: T) => R;
 

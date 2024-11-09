@@ -62,6 +62,6 @@ export type OptionalKeys<T> = T extends object
  * => type B = "b"
  * ```
  */
-export type RequiredKeys<T> = T extends unknown
+export type RequiredObjectKeys<T> = T extends unknown
     ? Exclude<keyof T, OptionalKeys<T>>
     : never;

@@ -1,3 +1,5 @@
+import type { RequiredObjectKeys } from "./object"
+
 /**
  * An immutable array is an array that cannot be modified after it is created.
  * 
@@ -26,6 +28,25 @@ export type Arrayable<T> = T | ImmutableArray<T>;
 
 export type ArrayValues<T extends ImmutableArray> = T[number];
 
+/**
+ * A utility type to extract the length of an `ImmutableArray`.
+ * 
+ * @category Array
+ * 
+ * @template T
+ * @returns The length of the array `T`.
+ * 
+ * @example
+ * ```ts
+ * import type {ArrayLength} from "@vertex/typify"
+ * 
+ * type A = ArrayLength<[number,number,number]>; 
+ * => type A = 3;
+ * 
+ * type B = ArrayLength<number[]>; 
+ * => type B = number;
+ * ```
+ */
 export type ArrayLength<T extends ImmutableArray> =
     T extends { readonly length: infer L }
     ? L
@@ -79,14 +100,31 @@ export type ArrayLast<T extends ImmutableArray> =
 
 
 /**
+ * A utility type to convert an `ImmutableArray` to an object-like type.
+ * It maps the indices of the array to object properties.
+ * 
+ * If the length of the array is a number, it will create an object where the keys are the indices
+ * of the array and the values are the corresponding elements of the array.
+ * 
  * @category Array
  * 
  * @template T
  * @returns
+ * An object-like type with keys as the indices of the array and values as the corresponding elements of the array.
+ * If the array is empty, the resulting type will be `never`.
  * 
  * @example
  * ```ts
  * import type {ObjectOf} from "@vertex/typify"
+ * 
+ * type A = ObjectOf<[string,number]>;
+ * => type A = { 0: string; 1: number; };
+ * 
+ * type B = ObjectOf<string[]>;
+ * => type B = { [x: number]: string; };
+ * 
+ * type C = ObjectOf<[string,number?]>;
+ * => type C = { 0: string; 1?: number | undefined;};
  * ```
  */
 export type ObjectOf<T extends ImmutableArray> =
@@ -94,4 +132,24 @@ export type ObjectOf<T extends ImmutableArray> =
     ? number extends ArrayLength<T>
     ? Pick<T, number>
     : Omit<T, keyof any[]>
-    : never 
+    : never
+
+/**
+ * @category Array
+ * 
+ * @template T
+ * @returns
+ * 
+ * @example
+ * ```ts
+ * import type {RequiredArrayKeys} from "@vertex/typify"
+ * 
+ * type A = RequiredArrayKeys<[string, number, symbol?]>;
+ * => type A = "0" | "1";
+ * 
+ * type B = RequiredArrayKeys<(string | number)[]>;
+ * => type B = number;
+ * ```
+ */
+export type RequiredArrayKeys<T extends ImmutableArray> =
+    RequiredObjectKeys<ObjectOf<T>>
