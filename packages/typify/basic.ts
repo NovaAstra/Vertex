@@ -74,3 +74,8 @@ export type Not<T extends boolean> = T extends true
     : T extends false
     ? true
     : never;
+
+export type Try<T1 extends any, T2 extends any, Catch = never> =
+    T1 extends T2
+    ? T1
+    : Catch
