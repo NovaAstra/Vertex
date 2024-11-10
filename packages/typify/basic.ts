@@ -68,3 +68,9 @@ export type Extends<T1 extends any, T2 extends any> =
     : T1 extends T2
     ? 1
     : 0
+
+export type Not<T extends boolean> = T extends true
+    ? false
+    : T extends false
+    ? true
+    : never;
