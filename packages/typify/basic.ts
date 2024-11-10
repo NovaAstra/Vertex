@@ -38,7 +38,7 @@ export type Fit<T1 extends any, T2 extends any> =
  * import type {Gaps} from "@vertex/typify"
  * 
  * type A = Gaps<[string, number?]>;
- * => type A = [string, (number | undefined)?];
+ * => type A = [string, number?];
  * 
  * type B = Gaps<string[]>;
  * => type B = string[];

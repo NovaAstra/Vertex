@@ -5,6 +5,8 @@ import type {
     Gaps
 } from "@vertex/typify"
 
+
+
 export type Curried<T extends AnyFunction> =
     <
         P extends Gaps<Parameters<T>>,

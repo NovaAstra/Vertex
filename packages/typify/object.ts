@@ -15,9 +15,11 @@ import type { Intrinsic } from "./internal/_intrinsic"
  * ```ts
  * import type {NonNullableFlat} from "@vertex/typify"
  * 
- * type A = { a: string | null, b: number | undefined };
- * type B = NonNullableFlat<A>;
- * => type B = { a: string; b: number; };
+ * type A = NonNullableFlat<{ a: string | null, b: number | undefined }>;
+ * => type A = { a: string; b: number; };
+ * 
+ * type B = NonNullableFlat<{ a: string | null, b?: number | undefined }>;
+ * => type B = { a: string; b?: number | undefined; }
  * 
  * type C = NonNullableFlat<{ a?: string }>;
  * => type C = { a?: string | undefined; };
