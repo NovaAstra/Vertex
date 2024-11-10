@@ -2,20 +2,19 @@ import type {
     AnyFunction,
     ImmutableArray,
     RequiredIndices,
-    Gaps
 } from "@vertex/typify"
 
 
 
-export type Curried<T extends AnyFunction> =
-    <
-        P extends Gaps<Parameters<T>>,
-        N extends ImmutableArray,
-        R extends any = ReturnType<T>
-    >(...args: Gaps<Parameters<T>> | P) =>
-        RequiredIndices<N> extends never
-        ? R
-        : Curried<(...args: N) => R>
+// export type Curried<T extends AnyFunction> =
+//     <
+//         P extends Gaps<Parameters<T>>,
+//         N extends ImmutableArray,
+//         R extends any = ReturnType<T>
+//     >(...args: Gaps<Parameters<T>> | P) =>
+//         RequiredIndices<N> extends never
+//         ? R
+//         : Curried<(...args: N) => R>
 
 // export function curry<T extends unknown[], R>(
 //     fn: (...args: T) => R,

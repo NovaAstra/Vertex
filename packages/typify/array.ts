@@ -47,7 +47,7 @@ export type ArrayValues<T extends ImmutableArray> = T[number];
  * => type B = number;
  * ```
  */
-export type ArrayLength<T extends ImmutableArray> =
+export type Length<T extends ImmutableArray> =
     T extends { readonly length: infer L }
     ? L
     : never;
@@ -70,12 +70,17 @@ export type ArrayLength<T extends ImmutableArray> =
  * const B: ArrayTail<[1, boolean, string]> = [false, "3"]
  * ```
  */
-export type ArrayTail<T extends ImmutableArray> =
+export type Tail<T extends ImmutableArray> =
     T extends readonly []
     ? T
     : T extends readonly [any?, ...infer L]
     ? L
     : T
+
+export type Head<T extends ImmutableArray> =
+    T["length"] extends 0
+    ? never
+    : T[0];
 
 /**
  * Retrieves the last element of an array.
@@ -95,9 +100,8 @@ export type ArrayTail<T extends ImmutableArray> =
  * const B: ArrayLast<[]> = undefined
  * ```
  */
-export type ArrayLast<T extends ImmutableArray> =
-    T[ArrayLength<ArrayTail<T>>]
-
+export type Last<T extends ImmutableArray> =
+    T[Length<Tail<T>>]
 
 /**
  * A utility type to convert an `ImmutableArray` to an object-like type.
@@ -129,7 +133,7 @@ export type ArrayLast<T extends ImmutableArray> =
  */
 export type ObjectOf<T extends ImmutableArray> =
     T extends unknown
-    ? number extends ArrayLength<T>
+    ? number extends Length<T>
     ? Pick<T, number>
     : Omit<T, keyof any[]>
     : never
