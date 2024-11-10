@@ -50,3 +50,21 @@ export type Fit<T1 extends any, T2 extends any> =
 export type Gaps<T extends ImmutableArray> = Fit<NonNullableFlat<{
     [K in keyof T]?: T[K] | Gap
 }>, T>
+
+/**
+ * @category
+ * 
+ * @template T1
+ * @template T2
+ * @returns
+ * 
+ * @example
+ * ```ts
+ * ```
+ */
+export type Extends<T1 extends any, T2 extends any> =
+    [T1] extends [never]
+    ? 0
+    : T1 extends T2
+    ? 1
+    : 0

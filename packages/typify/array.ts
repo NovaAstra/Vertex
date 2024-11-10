@@ -156,3 +156,18 @@ export type ObjectOf<T extends ImmutableArray> =
  */
 export type RequiredIndices<T extends ImmutableArray> =
     RequiredKeys<ObjectOf<T>>
+
+/**
+ * @category Array
+ * 
+ * @template T1
+ * @template T2
+ * @returns
+ * 
+ * @example
+ * ```ts
+ * import type {Concat} from "@vertex/typify"
+ * ```
+ */
+export type Concat<T1 extends ImmutableArray, T2 extends ImmutableArray> =
+    [...T1, ...T2]
