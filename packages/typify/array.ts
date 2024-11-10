@@ -149,6 +149,9 @@ export type ObjectOf<T extends ImmutableArray> =
  * 
  * type B = RequiredIndices<(string | number)[]>;
  * => type B = number;
+ * 
+ * type C = RequiredIndices<[string?, number?, symbol?]>;
+ * => type C = never;
  * ```
  */
 export type RequiredIndices<T extends ImmutableArray> =
