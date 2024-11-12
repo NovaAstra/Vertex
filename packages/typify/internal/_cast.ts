@@ -3,8 +3,8 @@
  * Ensures that `A1` fits the type `A2`
  * @category
  * 
- * @template A1
- * @template A2
+ * @template T1
+ * @template T2
  * @returns `A1` if it matches `A2`, otherwise `A2`.
  * 
  * @example
@@ -18,11 +18,11 @@
  * => type B = string;
  * ```
  */
-export type Cast<T, U> =
-    T extends unknown
-    ? U extends unknown
-    ? T extends U
-    ? T
-    : U
+export type Cast<T1, T2> =
+    T1 extends unknown
+    ? T2 extends unknown
+    ? T1 extends T2
+    ? T1
+    : T2
     : never
     : never;

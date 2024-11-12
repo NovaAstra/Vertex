@@ -38,8 +38,7 @@ export type Gap = typeof GapSymbol & {};
  * => type C = [string, undefined, number]
  * ```
  */
-export type Gaps<T extends ImmutableArray> = Cast<NonNullableFlat<{
+export type Gaps<T extends ImmutableArray> = NonNullableFlat<{
     [K in keyof T]?: T[K] | Gap
-}>, T>
-
-type C = Gaps<[string, number]>
+}>
+type C = Gaps<[string, undefined, number]>
