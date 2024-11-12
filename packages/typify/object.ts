@@ -19,10 +19,10 @@ import type { Intrinsic } from "./internal/_intrinsic"
  * => type A = { a: string; b: number; };
  * 
  * type B = NonNullableFlat<{ a: string | null, b?: number | undefined }>;
- * => type B = { a: string; b?: number | undefined; }
+ * => type B = { a: string; b?: number; }
  * 
  * type C = NonNullableFlat<{ a?: string }>;
- * => type C = { a?: string | undefined; };
+ * => type C = { a?: string; };
  * ```
  */
 export type NonNullableFlat<T> = {
@@ -87,4 +87,3 @@ export type OptionalKeys<T> = T extends object
 export type RequiredKeys<T> = T extends unknown
     ? Exclude<keyof T, OptionalKeys<T>>
     : never;
-    
