@@ -4,6 +4,7 @@
   "pnpmVersion": "9.12.2",
   "nodeSupportedVersionRange": ">=20",
   "ensureConsistentVersions": true,
+  "projectFolderMaxDepth": 3,
   "projects": [
     {
       "packageName": "@vertex/eslint-config",
@@ -28,6 +29,10 @@
     {
       "packageName": "@vertex/match",
       "projectFolder": "packages/match"
+    },
+    {
+      "packageName": "@vertex/peekify",
+      "projectFolder": "packages/peekify"
     },
     {
       "packageName": "@vertex/typify",

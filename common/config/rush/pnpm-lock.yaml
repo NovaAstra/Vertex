@@ -43,9 +43,17 @@ importers:
         specifier: workspace:*
         version: link:../elation
 
+  ../../packages/peekify: {}
+
   ../../packages/typify: {}
 
-  ../../plugins/packify: {}
+  ../../plugins/peek/crash: {}
+
+  ../../plugins/peek/vue: {}
+
+  ../../plugins/peek/xhr: {}
+
+  ../../plugins/rush/packify: {}
 
 packages:
 

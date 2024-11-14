@@ -1,4 +1,5 @@
 import type { Intrinsic } from "./internal/_intrinsic"
+import type { Key } from "./internal/_key"
 
 /**
  * Creates a new type by making all properties of the input type non-nullable 
