@@ -46,8 +46,20 @@
       "projectFolder": "components/tabula"
     },
     {
-      "packageName": "@vertex/packify",
-      "projectFolder": "plugins/packify"
+      "packageName": "@vertex-peek-plugin/crash",
+      "projectFolder": "plugins/peek/crash"
+    },
+    {
+      "packageName": "@vertex-peek-plugin/vue",
+      "projectFolder": "plugins/peek/vue"
+    },
+    {
+      "packageName": "@vertex-peek-plugin/xhr",
+      "projectFolder": "plugins/peek/xhr"
+    },
+    {
+      "packageName": "@vertex-rush-plugin/packify",
+      "projectFolder": "plugins/rush/packify"
     }
   ]
 }
