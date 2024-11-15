@@ -47,9 +47,25 @@ importers:
 
   ../../packages/typify: {}
 
-  ../../plugins/peek/crash: {}
+  ../../plugins/peek/crash:
+    dependencies:
+      '@vertex/peekify':
+        specifier: workspace:*
+        version: link:../../../packages/peekify
 
   ../../plugins/peek/lifecycle:
+    dependencies:
+      '@vertex/peekify':
+        specifier: workspace:*
+        version: link:../../../packages/peekify
+
+  ../../plugins/peek/promise:
+    dependencies:
+      '@vertex/peekify':
+        specifier: workspace:*
+        version: link:../../../packages/peekify
+
+  ../../plugins/peek/stack:
     dependencies:
       '@vertex/peekify':
         specifier: workspace:*

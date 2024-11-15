@@ -59,6 +59,14 @@
       "projectFolder": "plugins/peek/lifecycle"
     },
     {
+      "packageName": "@vertex-peek-plugin/promise",
+      "projectFolder": "plugins/peek/promise"
+    },
+    {
+      "packageName": "@vertex-peek-plugin/stack",
+      "projectFolder": "plugins/peek/stack"
+    },
+    {
       "packageName": "@vertex-peek-plugin/vue2",
       "projectFolder": "plugins/peek/vue2"
     },

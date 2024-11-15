@@ -1,5 +1,9 @@
 {
     "name": "@vertex-peek-plugin/stack",
     "type": "module",
-    "version": "0.0.1"
+    "version": "0.0.1",
+    "main": "index.ts",
+    "dependencies": {
+        "@vertex/peekify": "workspace:*"
+    }
 }

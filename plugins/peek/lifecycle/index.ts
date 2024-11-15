@@ -2,7 +2,8 @@ import {
     type VoidFunction,
     type AnyObject,
     type BasePlugin,
-    rewriteProperty
+    _global,
+    rewriteProperty,
 } from "@vertex/peekify"
 
 export interface LifecyclePluginOptions {
@@ -15,5 +16,13 @@ export function LifecyclePlugin(options: LifecyclePluginOptions = {}): BasePlugi
 
     return {
         name: PLUGIN_NAME,
+        setup() {
+            _global.addEventListener('load', () => {
+
+            })
+            _global.addEventListener('unload', () => {
+
+            })
+        }
     }
 }

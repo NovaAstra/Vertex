@@ -7,7 +7,8 @@
         "moduleResolution": "Bundler",
         "importHelpers": true,
         "lib": [
-            "ESNext"
+            "ESNext",
+            "DOM"
         ],
         "strict": true
     }
