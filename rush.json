@@ -31,10 +31,6 @@
       "projectFolder": "packages/match"
     },
     {
-      "packageName": "@vertex/peekify",
-      "projectFolder": "packages/peekify"
-    },
-    {
       "packageName": "@vertex/typify",
       "projectFolder": "packages/typify"
     },
