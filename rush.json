@@ -19,6 +19,14 @@
       "projectFolder": "packages/domify"
     },
     {
+      "packageName": "@vertex-monitro-client/browser",
+      "projectFolder": "monitro/clients/browser"
+    },
+    {
+      "packageName": "@vertex-monitro-client/node",
+      "projectFolder": "monitro/clients/node"
+    },
+    {
       "packageName": "@vertex-monitro/core",
       "projectFolder": "monitro/core"
     },

@@ -27,10 +27,25 @@ importers:
         specifier: ^2.1.4
         version: 2.1.5
 
+  ../../monitro/clients/browser:
+    dependencies:
+      '@vertex-monitro/core':
+        specifier: workspace:*
+        version: link:../../core
+
+  ../../monitro/clients/node:
+    dependencies:
+      '@vertex-monitro/core':
+        specifier: workspace:*
+        version: link:../../core
+
   ../../monitro/core: {}
 
   ../../monitro/playground/mock-app:
     dependencies:
+      '@vertex-monitro-client/browser':
+        specifier: workspace:*
+        version: link:../../clients/browser
       vue:
         specifier: ^3.5.12
         version: 3.5.12(typescript@5.6.3)

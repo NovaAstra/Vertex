@@ -1,7 +1,6 @@
 {
   "name": "@vertex-monitro-playground/mock-app",
-  "private": true,
-  "version": "0.0.0",
+  "version": "0.0.1",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -9,7 +8,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "vue": "^3.5.12"
+    "vue": "^3.5.12",
+    "@vertex-monitro-client/browser": "workspace:*"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.1.4",
