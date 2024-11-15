@@ -1,9 +1,9 @@
 {
-    "name": "@vertex-peek-plugin/crash",
+    "name": "@vertex-monitro-plugin/crash",
     "type": "module",
     "version": "0.0.1",
     "main": "index.ts",
     "dependencies": {
-      "@vertex/peekify": "workspace:*"
+      "@vertex-monitro/core": "workspace:*"
     }
 }

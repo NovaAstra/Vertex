@@ -1,9 +1,9 @@
 {
-    "name": "@vertex-peek-plugin/stack",
+    "name": "@vertex-monitro-plugin/lifecycle",
     "type": "module",
     "version": "0.0.1",
     "main": "index.ts",
     "dependencies": {
-        "@vertex/peekify": "workspace:*"
+      "@vertex-monitro/core": "workspace:*"
     }
 }

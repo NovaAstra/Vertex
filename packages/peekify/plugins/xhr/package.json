@@ -1,9 +1,9 @@
 {
-  "name": "@vertex-peek-plugin/xhr",
+  "name": "@vertex-monitro-plugin/xhr",
   "type": "module",
   "version": "0.0.1",
   "main": "index.ts",
   "dependencies": {
-    "@vertex/peekify": "workspace:*"
+    "@vertex-monitro/core": "workspace:*"
   }
 }

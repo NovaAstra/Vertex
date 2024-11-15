@@ -1,9 +1,9 @@
 {
-    "name": "@vertex-peek-plugin/promise",
+    "name": "@vertex-monitro-plugin/promise",
     "type": "module",
     "version": "0.0.1",
     "main": "index.ts",
     "dependencies": {
-      "@vertex/peekify": "workspace:*"
+      "@vertex-monitro/core": "workspace:*"
     }
 }
