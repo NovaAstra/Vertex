@@ -1,12 +1,12 @@
-import Vue from "vue"
+import { type App } from "vue"
 import {
     type VoidFunction,
     type AnyObject,
     type BasePlugin,
     rewriteProperty
-} from "@vertex/peekify"
+} from "@vertex-monitro/core"
 
-export type VueInstance = typeof Vue;
+export type VueInstance = App;
 
 export interface VuePluginOptions {
     vue?: VueInstance

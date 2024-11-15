@@ -19,6 +19,38 @@
       "projectFolder": "packages/domify"
     },
     {
+      "packageName": "@vertex-monitro/core",
+      "projectFolder": "monitro/core"
+    },
+    {
+      "packageName": "@vertex-monitro-playground/mock-app",
+      "projectFolder": "monitro/playground/mock-app"
+    },
+    {
+      "packageName": "@vertex-monitro-plugin/crash",
+      "projectFolder": "monitro/plugins/crash"
+    },
+    {
+      "packageName": "@vertex-monitro-plugin/lifecycle",
+      "projectFolder": "monitro/plugins/lifecycle"
+    },
+    {
+      "packageName": "@vertex-monitro-plugin/promise",
+      "projectFolder": "monitro/plugins/promise"
+    },
+    {
+      "packageName": "@vertex-monitro-plugin/stack",
+      "projectFolder": "monitro/plugins/stack"
+    },
+    {
+      "packageName": "@vertex-monitro-plugin/vue",
+      "projectFolder": "monitro/plugins/vue"
+    },
+    {
+      "packageName": "@vertex-monitro-plugin/xhr",
+      "projectFolder": "monitro/plugins/xhr"
+    },
+    {
       "packageName": "@vertex/elation",
       "projectFolder": "packages/elation"
     },
