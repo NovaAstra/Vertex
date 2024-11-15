@@ -21,7 +21,11 @@ export abstract class Client {
 
     public use(plugins: Plugin[]) {
         for (const plugin of plugins) {
+            const { name, setup } = plugin
 
+            if (!name) continue;
+
+            if (!setup) continue
         }
     }
 

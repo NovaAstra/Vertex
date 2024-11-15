@@ -12,9 +12,9 @@ export interface VuePluginOptions {
     vue?: VueInstance
 }
 
-export const PLUGIN_NAME = 'VUE2_PLUGIN' as const
+export const PLUGIN_NAME = 'VUE_PLUGIN' as const
 
-export function Vue2Plugin(options: VuePluginOptions = {}): BasePlugin {
+export function VuePlugin(options: VuePluginOptions = {}): BasePlugin {
     return {
         name: PLUGIN_NAME,
         setup() {

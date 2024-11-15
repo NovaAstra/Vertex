@@ -12,4 +12,5 @@ export class BrowserClient extends Client {
 
 export function MonitroClient(options: BrowserOptions) {
     const client = new BrowserClient(options);
+    client.use([])
 }
