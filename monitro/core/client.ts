@@ -1,22 +1,28 @@
 import { cloneDeep } from "lodash-es"
 import { type Plugin } from "./plugin"
 
+export interface App {
+    name: string;
+    version: string;
+}
+
 export interface ClientOptions {
 
 }
 
 export interface ClientContext {
-
+    app: App;
+    debug: boolean;
+    enabled: boolean;
 }
 
 export abstract class Client {
     private readonly options: ClientOptions;
 
-    private context: ClientContext;
+    public context: ClientContext | null = null;
 
     public constructor(options: ClientOptions) {
         this.options = options
-        this.context = {}
     }
 
     public use(plugins: Plugin[]) {
