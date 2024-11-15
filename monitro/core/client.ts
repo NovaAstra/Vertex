@@ -1,5 +1,5 @@
 import { cloneDeep } from "lodash-es"
-import { type Plugin } from "./plugin"
+import { type Plugin, PluginSystem } from "./plugin"
 
 export interface App {
     name: string;
@@ -19,20 +19,16 @@ export interface ClientContext {
 export abstract class Client {
     private readonly options: ClientOptions;
 
+    private readonly system: PluginSystem = new PluginSystem()
+
     public context: ClientContext | null = null;
 
     public constructor(options: ClientOptions) {
         this.options = options
     }
 
-    public use(plugins: Plugin[]) {
-        for (const plugin of plugins) {
-            const { name, setup } = plugin
-
-            if (!name) continue;
-
-            if (!setup) continue
-        }
+    public use(...plugins: Plugin[]): void {
+        this.system.use(...plugins)
     }
 
     public getClientOptions(): ClientOptions {

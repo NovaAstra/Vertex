@@ -4,7 +4,7 @@ import {
     type BasePlugin,
     _global,
     rewriteProperty,
-} from "@vertex/peekify"
+} from "@vertex-monitro/core"
 
 export interface LifecyclePluginOptions {
 

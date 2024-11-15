@@ -3,7 +3,7 @@ import {
     type AnyObject,
     type BasePlugin,
     rewriteProperty
-} from "@vertex/peekify"
+} from "@vertex-monitro/core"
 
 export interface XHRPluginOptions {
 
