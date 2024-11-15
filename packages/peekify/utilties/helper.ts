@@ -5,7 +5,7 @@ export function rewriteProperty(
     property: Key,
     replacement: AnyFunction,
     force: boolean = false
-) {
+): void {
     if (source === undefined) return
 
     if (property in source || force) {

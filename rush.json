@@ -55,8 +55,12 @@
       "projectFolder": "plugins/peek/crash"
     },
     {
-      "packageName": "@vertex-peek-plugin/vue",
-      "projectFolder": "plugins/peek/vue"
+      "packageName": "@vertex-peek-plugin/lifecycle",
+      "projectFolder": "plugins/peek/lifecycle"
+    },
+    {
+      "packageName": "@vertex-peek-plugin/vue2",
+      "projectFolder": "plugins/peek/vue2"
     },
     {
       "packageName": "@vertex-peek-plugin/xhr",

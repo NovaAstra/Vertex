@@ -1,0 +1,12 @@
+{
+    "name": "@vertex-peek-plugin/vue2",
+    "type": "module",
+    "version": "0.0.1",
+    "main": "index.ts",
+    "dependencies": {
+        "@vertex/peekify": "workspace:*"
+    },
+    "devDependencies": {
+        "vue": "2.7.15"
+    }
+}
