@@ -1,7 +1,7 @@
 import {
     type VoidFunction,
     type AnyObject,
-    type BasePlugin,
+    type Plugin,
     rewriteProperty
 } from "@vertex-monitro/core"
 
@@ -42,7 +42,7 @@ export enum MethodTypes {
 
 export const PLUGIN_NAME = 'XHR_PLUGIN' as const
 
-export function XHRPlugin(options: XHRPluginOptions = {}): BasePlugin {
+export function XHRPlugin(options: XHRPluginOptions = {}): Plugin {
     const originalXHRPro = XMLHttpRequest.prototype
 
     return {
@@ -58,7 +58,7 @@ export function XHRPlugin(options: XHRPluginOptions = {}): BasePlugin {
                             u: args[1]
                         },
                         s: {},
-                        t: client.getTime()
+                        t: (client as any).getTime()
                     };
 
                     originalOpen.apply(this, args);

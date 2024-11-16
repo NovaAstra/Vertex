@@ -1,7 +1,7 @@
 import {
     type VoidFunction,
     type AnyObject,
-    type BasePlugin,
+    type Plugin,
     _global,
     rewriteProperty,
 } from "@vertex-monitro/core"
@@ -12,7 +12,7 @@ export interface LifecyclePluginOptions {
 
 export const PLUGIN_NAME = 'LIFECYCLE_PLUGIN' as const
 
-export function LifecyclePlugin(options: LifecyclePluginOptions = {}): BasePlugin {
+export function LifecyclePlugin(options: LifecyclePluginOptions = {}): Plugin {
 
     return {
         name: PLUGIN_NAME,

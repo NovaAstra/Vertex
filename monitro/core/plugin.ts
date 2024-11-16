@@ -1,12 +1,20 @@
-export interface Plugin {
-    name: string;
-    setup: any
+export interface SetupApi {
+
 }
 
-export class PluginSystem {
-    private plugins: Plugin[] = []
+export type SetupFunction = (api: SetupApi) => void
 
-    public use(...plugins: Plugin[]): Plugin[] {
+export interface Plugin {
+    name: string;
+    setup: SetupFunction
+}
+
+export type PluginFunction = (...args: any[]) => Plugin
+
+export class PluginSystem {
+    private plugins: PluginFunction[] = []
+
+    public use(...plugins: PluginFunction[]): PluginFunction[] {
         this.plugins.push(...plugins)
         return this.plugins
     }

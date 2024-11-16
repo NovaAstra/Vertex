@@ -2,7 +2,7 @@ import { type App } from "vue"
 import {
     type VoidFunction,
     type AnyObject,
-    type BasePlugin,
+    type Plugin,
     rewriteProperty
 } from "@vertex-monitro/core"
 
@@ -14,7 +14,7 @@ export interface VuePluginOptions {
 
 export const PLUGIN_NAME = 'VUE_PLUGIN' as const
 
-export function VuePlugin(options: VuePluginOptions = {}): BasePlugin {
+export function VuePlugin(options: VuePluginOptions = {}): Plugin {
     return {
         name: PLUGIN_NAME,
         setup() {

@@ -1,7 +1,7 @@
 import {
     type VoidFunction,
     type AnyObject,
-    type BasePlugin,
+    type Plugin,
     _global,
     rewriteProperty,
 } from "@vertex-monitro/core"

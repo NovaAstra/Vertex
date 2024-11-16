@@ -1,4 +1,5 @@
 import { Client } from "@vertex-monitro/core"
+import {XHRPlugin} from "@vertex-monitro-plugin/xhr"
 
 export interface BrowserOptions {
 
