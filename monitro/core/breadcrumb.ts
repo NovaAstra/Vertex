@@ -1,6 +1,9 @@
+import type { BreadcrumbConfig, BreadcrumbStack } from "./types"
+import { BreadcrumbLevel } from "./enums"
 
+export interface BreadcrumbOptions extends BreadcrumbConfig {
 
-
+}
 
 const DEFAULT_BREADCRUMB_OPTIONS: Partial<BreadcrumbOptions> = {
     maxBreadcrumbs: 80

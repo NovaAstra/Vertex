@@ -51,8 +51,8 @@
       "projectFolder": "monitro/plugins/stack"
     },
     {
-      "packageName": "@vertex-monitro-plugin/vue",
-      "projectFolder": "monitro/plugins/vue"
+      "packageName": "@vertex-monitro-plugin/vue3",
+      "projectFolder": "monitro/plugins/vue3"
     },
     {
       "packageName": "@vertex-monitro-plugin/xhr",

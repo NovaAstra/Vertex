@@ -10,6 +10,23 @@ export type VoidFunction = AnyFunction<any[], void>
 
 export type MaybePromise<T> = T | Promise<T>;
 
+export interface PluginAPI<D = unknown> {
+    next: (data: D | TransportDataset<D>) => void;
+    timestamp: () => number
+}
+
+export interface TransportDataset<D> {
+    logId: string;
+    timestamp: number;
+    data?: D
+}
+
+export interface Plugin<D = any> {
+    name: string;
+    setup: (api: PluginAPI<D>) => MaybePromise<void>;
+    transform?: (data: D) => TransportDataset<D>
+}
+
 export type App = {
     name: string;
     version?: string;

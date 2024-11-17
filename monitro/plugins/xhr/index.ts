@@ -57,7 +57,7 @@ export function XHRPlugin(options: XHRPluginOptions = {}): Plugin<HttpMeta> {
                             u: args[1]
                         },
                         s: {},
-                        t: api._t()
+                        t: api.timestamp()
                     } as HttpMeta;
 
                     originalOpen.apply(this, args);
@@ -69,7 +69,7 @@ export function XHRPlugin(options: XHRPluginOptions = {}): Plugin<HttpMeta> {
                     this.addEventListener('loadend', function (this: ExtendXMLHttpRequest) {
                         const { responseType, response, status } = this;
 
-                        const _t = api._t();
+                        const _t = api.timestamp();
 
                         if (['', 'json', 'text'].indexOf(responseType) !== -1) {
                             this._meta.s.d = typeof response === 'object' ? JSON.stringify(response) : response;
