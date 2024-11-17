@@ -1,28 +1,19 @@
-export interface SetupApi {
+import type { MaybePromise } from "./types"
 
+export interface PluginAPI<M = unknown> {
+    next: (meta: M) => void;
+    _t: () => number
 }
 
-export type SetupFunction = (api: SetupApi) => void
-
-export interface Plugin {
+export interface Plugin<M = unknown> {
     name: string;
-    setup: SetupFunction
+    setup: (api: PluginAPI<M>) => MaybePromise<void>;
 }
 
-export type PluginFunction = (...args: any[]) => Plugin
+export class PluginContext {
+    public version: string = "0.0.0"
+}
 
 export class PluginSystem {
-    private plugins: PluginFunction[] = []
-
-    public use(...plugins: PluginFunction[]): PluginFunction[] {
-        this.plugins.push(...plugins)
-        return this.plugins
-    }
-
-    public async launch() {
-        const promises = this.plugins.map(plugin => {
-            return plugin.setup()
-        })
-        await Promise.all(promises)
-    }
+    private plugins: Plugin[] = []
 }

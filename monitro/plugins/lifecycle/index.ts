@@ -20,6 +20,7 @@ export function LifecyclePlugin(options: LifecyclePluginOptions = {}): Plugin {
             _global.addEventListener('load', () => {
 
             })
+
             _global.addEventListener('unload', () => {
 
             })

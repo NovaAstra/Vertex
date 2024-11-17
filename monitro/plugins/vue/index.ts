@@ -1,38 +1,40 @@
-import { type App } from "vue"
+import { type App, type AppConfig, type ComponentPublicInstance } from "vue"
 import {
-    type VoidFunction,
-    type AnyObject,
+    type PluginAPI,
     type Plugin,
-    rewriteProperty
 } from "@vertex-monitro/core"
 
-export type VueInstance = App;
+export type Vue3Instance = App;
 
-export interface VuePluginOptions {
-    vue?: VueInstance
+export interface Vue3PluginOptions {
+    vue?: Vue3Instance
 }
 
-export const PLUGIN_NAME = 'VUE_PLUGIN' as const
+export interface Vue3Meta {
 
-export function VuePlugin(options: VuePluginOptions = {}): Plugin {
+}
+
+export const PLUGIN_NAME = 'VUE3_PLUGIN' as const
+
+export function Vue3Plugin(options: Vue3PluginOptions = {}): Plugin<Vue3Meta> {
     return {
         name: PLUGIN_NAME,
-        setup() {
+        setup(api: PluginAPI<Vue3Meta>) {
             const { vue } = options
 
             if (!vue) return
 
-            rewriteProperty(vue.config, 'errorHandler', (originalErrorHandler: VoidFunction) => {
-                return function () {
+            vue.config.warnHandler =
+                (msg: string, instance: ComponentPublicInstance | null, trace: string) => {
+                    const _meta = {
+
+                    } as Vue3Meta
+                }
+
+            vue.config.errorHandler =
+                (err: unknown, instance: ComponentPublicInstance | null, info: string) => {
 
                 }
-            })
-
-            rewriteProperty(vue.config, 'warnHandler', (originalWarnHandler: VoidFunction) => {
-                return function () {
-
-                }
-            })
         }
     }
 }

@@ -2,6 +2,7 @@ import {
     type VoidFunction,
     type AnyObject,
     type Plugin,
+    type PluginAPI,
     rewriteProperty
 } from "@vertex-monitro/core"
 
@@ -42,14 +43,12 @@ export enum MethodTypes {
 
 export const PLUGIN_NAME = 'XHR_PLUGIN' as const
 
-export function XHRPlugin(options: XHRPluginOptions = {}): Plugin {
+export function XHRPlugin(options: XHRPluginOptions = {}): Plugin<HttpMeta> {
     const originalXHRPro = XMLHttpRequest.prototype
 
     return {
         name: PLUGIN_NAME,
-        setup() {
-            const client = this;
-
+        setup(api: PluginAPI<HttpMeta>) {
             rewriteProperty(originalXHRPro, "open", (originalOpen: VoidFunction): VoidFunction => {
                 return function (this: ExtendXMLHttpRequest, ...args: Parameters<XMLHttpRequest['open']>): void {
                     this._meta = {
@@ -58,8 +57,8 @@ export function XHRPlugin(options: XHRPluginOptions = {}): Plugin {
                             u: args[1]
                         },
                         s: {},
-                        t: (client as any).getTime()
-                    };
+                        t: api._t()
+                    } as HttpMeta;
 
                     originalOpen.apply(this, args);
                 }
@@ -67,8 +66,20 @@ export function XHRPlugin(options: XHRPluginOptions = {}): Plugin {
 
             rewriteProperty(originalXHRPro, "send", (originalSend: VoidFunction): VoidFunction => {
                 return function (this: ExtendXMLHttpRequest, ...args: Parameters<XMLHttpRequest['send']>): void {
-                    const { r } = this._meta
-                    const { u } = r
+                    this.addEventListener('loadend', function (this: ExtendXMLHttpRequest) {
+                        const { responseType, response, status } = this;
+
+                        const _t = api._t();
+
+                        if (['', 'json', 'text'].indexOf(responseType) !== -1) {
+                            this._meta.s.d = typeof response === 'object' ? JSON.stringify(response) : response;
+                        }
+
+                        this._meta.s.s = status;
+                        this._meta.t = _t - this._meta.t;
+
+                        api.next(this._meta);
+                    })
 
                     originalSend.apply(this, args);
                 }

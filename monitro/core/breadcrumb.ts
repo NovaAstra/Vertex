@@ -1,39 +1,13 @@
-export enum BrowserBreadcrumbEnum {
-    CONSOLE = 11,
-    XHR,
-    CODE_ERROR,
-    LIFECYCLE,
-    CRASH
-}
 
-export enum BreadcrumbLevel {
-    FATAL = 1,
-    ERROR,
-    WARN,
-    INFO,
-    DEBUG
-}
 
-export type BreadcrumbTypes = BrowserBreadcrumbEnum
 
-export interface BreadcrumbStack {
-    l: string;
-    b: BreadcrumbTypes;
-    m: string;
-    t: number;
-    lv?: BreadcrumbLevel;
-}
-
-export interface BreadcrumbOptions {
-    max: number;
-}
 
 const DEFAULT_BREADCRUMB_OPTIONS: Partial<BreadcrumbOptions> = {
-    max: 80
+    maxBreadcrumbs: 80
 }
 
 export class Breadcrumb {
-    private readonly max: number = 80;
+    private readonly maxBreadcrumbs: number = 80;
 
     private stacks: BreadcrumbStack[] = []
 
@@ -45,7 +19,7 @@ export class Breadcrumb {
         if (!stack.lv) {
             stack.lv = BreadcrumbLevel.INFO;
         }
-        if (this.stacks.length >= this.max) {
+        if (this.stacks.length >= this.maxBreadcrumbs) {
             this.pop();
         }
         this.stacks.unshift(stack);

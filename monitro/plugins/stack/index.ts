@@ -1,6 +1,4 @@
 import {
-    type VoidFunction,
-    type AnyObject,
     type Plugin,
     _global,
     rewriteProperty,
@@ -11,9 +9,11 @@ export const PLUGIN_NAME = 'STACK_PLUGIN' as const
 export function StackPlugin(): Plugin {
     return {
         name: PLUGIN_NAME,
-        setup() {
+        setup(api) {
             _global.addEventListener("error", (event: ErrorEvent) => {
                 event.preventDefault();
+
+                api.next({})
             })
         }
     }
