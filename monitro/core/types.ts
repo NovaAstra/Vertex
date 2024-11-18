@@ -1,4 +1,4 @@
-import { BrowserBreadcrumbEnum, BreadcrumbLevel } from "./enums"
+import { EVENT_TYPE_ENUM, ERROR_LEVEL_ENUM } from "./enums"
 
 export type Key = string | number | symbol
 
@@ -42,16 +42,28 @@ export type ClientConfig = {
     attachStacktrace?: boolean;
 }
 
-export type BreadcrumbTypes = BrowserBreadcrumbEnum
-
-export interface BreadcrumbStack {
-    l: string;
-    b: BreadcrumbTypes;
-    m: string;
-    t: number;
-    lv?: BreadcrumbLevel;
-}
 
 export interface BreadcrumbConfig {
     maxBreadcrumbs: number;
+}
+
+export type LogMessage = string;
+
+export type LogAgent = 'Chrome'
+
+export interface LogDataset<D = any> {
+    name: string;
+    page: string;
+    timestamp: string;
+    agent: LogAgent;
+
+    tag: EVENT_TYPE_ENUM;
+
+    data?: D;
+
+    file?: string;
+    position?: string;
+
+    level?: ERROR_LEVEL_ENUM;
+    message?: LogMessage;
 }

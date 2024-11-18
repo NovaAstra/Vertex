@@ -2,8 +2,8 @@ import {
     type VoidFunction,
     type AnyObject,
     type Plugin,
-    _global,
-    rewriteProperty,
+    type PluginAPI,
+    _global
 } from "@vertex-monitro/core"
 
 export interface LifecyclePluginOptions {
@@ -16,9 +16,9 @@ export function LifecyclePlugin(options: LifecyclePluginOptions = {}): Plugin {
 
     return {
         name: PLUGIN_NAME,
-        setup() {
+        setup(api: PluginAPI) {
             _global.addEventListener('load', () => {
-
+                
             })
 
             _global.addEventListener('unload', () => {

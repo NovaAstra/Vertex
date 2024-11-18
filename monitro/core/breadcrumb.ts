@@ -1,5 +1,4 @@
-import type { BreadcrumbConfig, BreadcrumbStack } from "./types"
-import { BreadcrumbLevel } from "./enums"
+import type { BreadcrumbConfig } from "./types"
 
 export interface BreadcrumbOptions extends BreadcrumbConfig {
 
@@ -12,16 +11,14 @@ const DEFAULT_BREADCRUMB_OPTIONS: Partial<BreadcrumbOptions> = {
 export class Breadcrumb {
     private readonly maxBreadcrumbs: number = 80;
 
-    private stacks: BreadcrumbStack[] = []
+    private stacks: any[] = []
 
     public constructor(options: Partial<BreadcrumbOptions> = {}) {
         Object.assign(this, DEFAULT_BREADCRUMB_OPTIONS, options)
     }
 
-    public unshift(stack: BreadcrumbStack): BreadcrumbStack[] {
-        if (!stack.lv) {
-            stack.lv = BreadcrumbLevel.INFO;
-        }
+    public unshift(stack: any): any[] {
+
         if (this.stacks.length >= this.maxBreadcrumbs) {
             this.pop();
         }
@@ -34,7 +31,7 @@ export class Breadcrumb {
         this.stacks = [];
     }
 
-    public getStack(): BreadcrumbStack[] {
+    public getStack(): any[] {
         return this.stacks.slice(0);
     }
 
