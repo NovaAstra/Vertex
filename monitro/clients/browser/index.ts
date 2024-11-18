@@ -1,6 +1,8 @@
 import { type ClientOptions, type Plugin, Client, Transport, Breadcrumb } from "@vertex-monitro/core"
 import { XHRPlugin } from "@vertex-monitro-plugin/xhr"
-import { Vue3Plugin } from "@vertex-monitro-plugin/vue3"
+import { StackPlugin } from "@vertex-monitro-plugin/stack"
+import { PromisePlugin } from "@vertex-monitro-plugin/promise"
+import { LifecyclePlugin } from "@vertex-monitro-plugin/lifecycle"
 
 export interface BrowserOptions extends ClientOptions { }
 
@@ -13,8 +15,6 @@ export class BrowserClient extends Client {
     public constructor(options: BrowserOptions) {
         super(options);
     }
-
-    public async launch() { }
 }
 
 export function MonitroClient(options: BrowserOptions) {
@@ -22,7 +22,9 @@ export function MonitroClient(options: BrowserOptions) {
 
     const plugins: Plugin[] = [
         XHRPlugin(),
-        Vue3Plugin()
+        StackPlugin(),
+        PromisePlugin(),
+        LifecyclePlugin()
     ]
 
     client.use(plugins)

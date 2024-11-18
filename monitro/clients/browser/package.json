@@ -2,7 +2,10 @@
   "name": "@vertex-monitro-client/browser",
   "type": "module",
   "version": "0.0.1",
-  "main": "index.ts",
+  "main": "dist/browser.js",
+  "scripts": {
+    "build": "vite build"
+  },
   "dependencies": {
     "@vertex-monitro/core": "workspace:*",
     "lodash-es": "~4.17.21",
@@ -11,6 +14,11 @@
     "@vertex-monitro-plugin/lifecycle": "workspace:*",
     "@vertex-monitro-plugin/promise": "workspace:*",
     "@vertex-monitro-plugin/stack": "workspace:*",
-    "@vertex-monitro-plugin/vue": "workspace:*"
+    "@vertex-monitro-plugin/vue3": "workspace:*"
+  },
+  "devDependencies": {
+    "vite": "^5.4.11",
+    "vite-plugin-dts": "~4.3.0",
+    "@types/node": "~22.9.0"
   }
 }
