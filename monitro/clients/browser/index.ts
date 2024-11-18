@@ -1,10 +1,14 @@
-import { type ClientOptions, type Plugin, Client, Transport, Breadcrumb } from "@vertex-monitro/core"
+import { type ClientOptions, type Plugin, type LogDataset, Client, Transport, Breadcrumb, AnyFunction } from "@vertex-monitro/core"
 import { XHRPlugin } from "@vertex-monitro-plugin/xhr"
 import { StackPlugin } from "@vertex-monitro-plugin/stack"
 import { PromisePlugin } from "@vertex-monitro-plugin/promise"
 import { LifecyclePlugin } from "@vertex-monitro-plugin/lifecycle"
 
 export interface BrowserOptions extends ClientOptions { }
+
+export interface BrowserLogDataset<D> extends LogDataset<D> {
+    route: string;
+}
 
 
 export class BrowserClient extends Client {
@@ -14,6 +18,14 @@ export class BrowserClient extends Client {
 
     public constructor(options: BrowserOptions) {
         super(options);
+    }
+
+    public async launch() {
+        return ''
+    }
+
+    public nextTick(callback: AnyFunction): void {
+
     }
 }
 

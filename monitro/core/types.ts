@@ -15,55 +15,48 @@ export interface PluginAPI<D = unknown> {
     timestamp: () => number
 }
 
-export interface TransportDataset<D> {
-    logId: string;
-    timestamp: number;
-    data?: D
-}
-
 export interface Plugin<D = any> {
     name: string;
     setup: (api: PluginAPI<D>) => MaybePromise<void>;
     transform?: (data: D) => TransportDataset<D>
 }
 
-export type App = {
-    name: string;
-    version?: string;
-    description?: string;
-}
-
-export type ClientConfig = {
-    app: App;
-    dsn: string;
+export type BaseClientOptions = {
+    dsn?: string;
+    disabled?: boolean
     debug?: boolean;
+    record?: boolean;
+    localization?: boolean
+    enableTraceId?: boolean
     tracesSampleRate?: number;
     maxBreadcrumbs?: number;
     attachStacktrace?: boolean;
+    ignoreErrors?: Array<string | RegExp>;
+    ignoreRequest?: Array<string | RegExp>;
 }
 
-
-export interface BreadcrumbConfig {
-    maxBreadcrumbs: number;
+export type BaseClientHooks = {
+    backTrackerId?: () => string | number
 }
 
-export type LogMessage = string;
+export type ClientOptions = BaseClientOptions & BaseClientHooks
+
 
 export type LogAgent = 'Chrome'
 
-export interface LogDataset<D = any> {
-    name: string;
-    page: string;
+export interface LogDataset<D> extends TransportDataset<D> {
+    guid: string;
     timestamp: string;
-    agent: LogAgent;
+    useragent: LogAgent;
+}
 
+export interface TransportDataset<D> {
+    name: string;
     tag: EVENT_TYPE_ENUM;
-
     data?: D;
-
-    file?: string;
+    filename?: string;
     position?: string;
-
+    stack?: string;
     level?: ERROR_LEVEL_ENUM;
-    message?: LogMessage;
+    message?: string;
 }
