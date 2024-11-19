@@ -6,10 +6,6 @@ import App from './App.vue'
 async function bootstrap() {
     MonitroClient({
         dsn: "localhost:8001",
-        app: {
-            name: 'MockApp',
-            description: 'mock app'
-        },
     })
 
     const app = createApp(App)

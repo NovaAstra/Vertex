@@ -1,6 +1,9 @@
 import { customAlphabet } from 'nanoid'
-import { isString, isRegExp, isArray } from "lodash-es"
-import type { AnyFunction, AnyObject, Key, Pattern } from "./types"
+import { isString, isRegExp, isArray, map, filter } from "lodash-es"
+import type { AnyFunction, AnyObject, Key, Pattern, ErrorStack } from "./types"
+
+const FULL_MATCH =
+    /^\s*at (?:(.*?) ?\()?((?:file|https?|blob|chrome-extension|address|native|eval|webpack|<anonymous>|[-a-z]+:|.*bundle|\/).*?)(?::(\d+))?(?::(\d+))?\)?\s*$/i;
 
 
 export function isType(type: any) {
@@ -53,6 +56,124 @@ export function match(input: string, pattern: Pattern): boolean {
     return false
 }
 
+export function isObjectOverSizeLimit(
+    object: AnyObject,
+    limitInKB: number
+): boolean {
+    const serializedObject = JSON.stringify(object)
+    const sizeInBytes = new TextEncoder().encode(serializedObject).length
+    const sizeInKB = sizeInBytes / 1024
+    return sizeInKB > limitInKB
+}
+
+export function getLocationHref(): string {
+    if (typeof document === 'undefined' || document.location == null) return ''
+    return document.location.href
+}
+
+export function isPromiseRejectedResult(
+    event: ErrorEvent | PromiseRejectionEvent
+): event is PromiseRejectionEvent {
+    return (event as PromiseRejectionEvent).reason !== undefined
+}
+
+export function parseStack(error: Error): ErrorStack {
+    const { stack = '', message = '' } = error
+    const result = { message: message, stack: stack }
+
+    if (stack) {
+        const rChromeCallStack = /^\s*at\s*([^(]+)\s*\((.+?):(\d+):(\d+)\)$/
+        const rMozlliaCallStack = /^\s*([^@]*)@(.+?):(\d+):(\d+)$/
+        const callStackStr = stack.replace(
+            new RegExp(`^[\\w\\s:]*${message}\n`),
+            ''
+        )
+        const callStackFrameList = map(
+            filter(callStackStr.split('\n'), (item: string) => item),
+            (str: string) => {
+                const chromeErrResult = str.match(rChromeCallStack)
+                if (chromeErrResult) {
+                    return {
+                        triggerPageUrl: chromeErrResult[2],
+                        line: chromeErrResult[3],
+                        col: chromeErrResult[4]
+                    }
+                }
+
+                const mozlliaErrResult = str.match(rMozlliaCallStack)
+                if (mozlliaErrResult) {
+                    return {
+                        triggerPageUrl: mozlliaErrResult[2],
+                        line: mozlliaErrResult[3],
+                        col: mozlliaErrResult[4]
+                    }
+                }
+                return {}
+            }
+        )
+        const item = callStackFrameList[0] || {}
+        return { ...result, ...item }
+    }
+    return result
+}
+
+export function parseError(error: any) {
+    if (error instanceof Error) {
+        return parseStack(error)
+    }
+
+    if (error.message) return parseStack(error)
+
+    if (typeof error === 'string') return { message: error }
+
+    if (isArray(error))
+        return { message: error.join(';') }
+
+    return {}
+}
+
+export function parseErrorEvent(event: ErrorEvent | PromiseRejectionEvent) {
+    if (isPromiseRejectedResult(event)) {
+        return { ...parseError(event.reason) }
+    }
+
+    const { target } = event
+    if (target instanceof HTMLElement) {
+        if (target.nodeType === 1) {
+            const result = {
+                initiatorType: target.nodeName.toLowerCase(),
+                requestUrl: ''
+            }
+            switch (target.nodeName.toLowerCase()) {
+                case 'link':
+                    result.requestUrl = (target as HTMLLinkElement).href
+                    break
+                default:
+                    result.requestUrl =
+                        (target as HTMLImageElement).currentSrc ||
+                        (target as HTMLScriptElement).src
+            }
+            return result
+        }
+    }
+
+    if (event.error) {
+        const e = event.error
+        e.fileName = e.filename || event.filename
+        e.columnNumber = e.colno || event.colno
+        e.lineNumber = e.lineno || event.lineno
+        return { ...parseError(e) }
+    }
+
+
+    return {
+        line: (_global as any).event.errorLine,
+        col: (_global as any).event.errorCharacter,
+        errMessage: (_global as any).event.errorMessage,
+        triggerPageUrl: (_global as any).event.errorUrl
+    }
+}
+
 export function safeStringify(obj: object): string {
     const set = new Set()
     const str = JSON.stringify(obj, function (_key, value) {
@@ -92,6 +213,14 @@ export function sendByXML<D extends AnyObject>(url: string, data: D): Promise<vo
         }
     })
 }
+
+export const microtask: AnyFunction<[AnyFunction]> =
+    typeof queueMicrotask === "function"
+        ? queueMicrotask
+        : (fn) => {
+            Promise.resolve().then(fn);
+        };
+
 
 const alphabet = '23456789ABCDEFGHJKLMNPQRSTWXYZabcdefghijkmnopqrstuvwxyz';
 

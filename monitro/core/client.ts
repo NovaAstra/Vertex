@@ -1,12 +1,12 @@
 import { isFunction } from "lodash-es"
 import type {
     ClientOptions,
-    ClientContext,
     AnyObject,
-    Plugin,
-    PluginAPI,
+    BasePlugin,
+    BasePluginAPI,
     TransportDataset,
-    AnyFunction
+    AnyFunction,
+    Field
 } from "./types"
 import { match, traceId } from "./utiltes";
 
@@ -14,7 +14,7 @@ export type TraceIdCallback = (field: string, traceId: string) => void
 
 export interface BaseOptions extends ClientOptions {
     setTraceId: (http: string, callback: TraceIdCallback) => void;
-    use(plugins: Plugin[]): Promise<void>
+    use(plugins: BasePlugin[]): Promise<void>
 }
 
 export const DEFAULT_CLIENT_OPTIONS: ClientOptions = {
@@ -27,33 +27,30 @@ export const DEFAULT_CLIENT_OPTIONS: ClientOptions = {
     includeTraceId: /.*/
 }
 
-export function createApis<D = unknown>(this: Client, plugin: Plugin<D>): PluginAPI<D> {
-    const context = this.context
+export function createApis<K extends Field = Field, T extends Field = Field, D = any>(
+    this: Client,
+    plugin: BasePlugin<K, T, D>
+): BasePluginAPI<K, T, D> {
     const api = Object.create(null)
 
     api.next = (data: D) => {
         const dataset = isFunction(plugin.transform)
-            ? plugin.transform.apply(this, [data, context])
-            : data as TransportDataset<D>
+            ? plugin.transform.call(this, data)
+            : data as TransportDataset<K, T, D>
+
+        console.log(dataset)
 
         if (!this.initialized) {
             this.tasks.push(dataset)
             return
         }
 
-        this.send(dataset)
+        // this.send(this.options.dsn!, dataset)
     }
 
     return api
 }
 
-export function createContext(this: Client): ClientContext {
-    const context = Object.create(null)
-
-    context.options = this.options
-
-    return context as ClientContext
-}
 
 export abstract class Client<T extends ClientOptions = ClientOptions> implements BaseOptions {
 
@@ -65,12 +62,9 @@ export abstract class Client<T extends ClientOptions = ClientOptions> implements
 
     protected readonly tasks: AnyObject[] = []
 
-    public context!: ClientContext;
 
     public constructor(options: T) {
         this.options = Object.assign({}, DEFAULT_CLIENT_OPTIONS, options)
-
-        this.context = createContext.call(this)
 
         this.launch().then(appId => {
             if (appId && this.appId !== appId) {
@@ -90,25 +84,23 @@ export abstract class Client<T extends ClientOptions = ClientOptions> implements
         }
     }
 
-    public async use(plugins: Plugin[]): Promise<void> {
-        const context = this.context
-
+    public async use(plugins: BasePlugin[]): Promise<void> {
         for (const plugin of plugins) {
             const apis = createApis.call(this, plugin)
-            await plugin.setup.apply(this, [apis, context])
+            await plugin.setup.call(this, apis)
         }
     }
 
-    public abstract nextTick(callback: AnyFunction, task: AnyObject): void
+    public abstract nextTick(callback: AnyFunction, ...args: any[]): void
 
-    public abstract send<D>(dataset: D): Promise<void>
+    public abstract send<D>(url: string, dataset: D): Promise<void>
 
     protected abstract launch(): Promise<string>;
 
     private execute() {
         while (this.tasks.length) {
             const task = this.tasks.shift()!;
-            this.nextTick(this.send, task)
+            this.nextTick(this.send)
         }
     }
 }

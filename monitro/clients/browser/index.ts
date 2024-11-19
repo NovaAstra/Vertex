@@ -1,28 +1,51 @@
 import {
     type ClientOptions,
-    type Plugin,
-    type LogDataset,
+    type BasePlugin,
+    type BaseLogDataset,
     type AnyObject,
+    type AnyFunction,
+    type EventType,
+    type EventKind,
+    _global,
+    isObjectOverSizeLimit,
     Client,
     Breadcrumb,
-    AnyFunction
+    sendByBeacon,
+    sendByImage,
+    sendByXML
 } from "@vertex-monitro/core"
-import { XHRPlugin } from "@vertex-monitro-plugin/xhr"
+// import { XHRPlugin } from "@vertex-monitro-plugin/xhr"
 import { StackPlugin } from "@vertex-monitro-plugin/stack"
 import { PromisePlugin } from "@vertex-monitro-plugin/promise"
-import { LifecyclePlugin } from "@vertex-monitro-plugin/lifecycle"
+// import { LifecyclePlugin } from "@vertex-monitro-plugin/lifecycle"
+
+
+export type BrowserPlugin = BasePlugin
 
 export interface BrowserOptions extends ClientOptions {
-    plugins?: Plugin[]
+    plugins?: BrowserPlugin[]
 }
 
-export interface BrowserLogDataset<D> extends LogDataset<D> {
+export interface BrowserLogDataset<
+    K extends EventKind = EventKind,
+    T extends EventType = EventType,
+    D = any
+> extends BaseLogDataset<K, T, D> {
     route: string;
 }
 
+const sendType = (data: AnyObject): number => {
+    if (_global.navigator) {
+        return isObjectOverSizeLimit(data, 60) ? 3 : 1
+    }
+
+    return isObjectOverSizeLimit(data, 2) ? 3 : 2
+}
 
 export class BrowserClient extends Client {
     protected readonly breadcrumb: Breadcrumb
+
+    private diff: number = 0
 
     public constructor(options: BrowserOptions) {
         super(options);
@@ -37,19 +60,30 @@ export class BrowserClient extends Client {
 
     }
 
-    public async send<D>(data: D) {
-
+    public async send<D extends AnyObject>(url: string, data: D) {
+        const type = sendType(data)
+        switch (type) {
+            case 1:
+                sendByBeacon(url, data)
+                break
+            case 2:
+                sendByImage(url, data)
+                break
+            case 3:
+                sendByXML(url, data)
+                break
+        }
     }
 }
 
 export function MonitroClient(options: BrowserOptions) {
     const client = new BrowserClient(options);
 
-    const plugins: Plugin[] = [
-        XHRPlugin(),
+    const plugins: BrowserPlugin[] = [
+        // XHRPlugin(),
         StackPlugin(),
         PromisePlugin(),
-        LifecyclePlugin()
+        // LifecyclePlugin()
     ]
 
     if (Array.isArray(options.plugins)) plugins.push(...options.plugins)

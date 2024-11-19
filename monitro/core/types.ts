@@ -1,6 +1,15 @@
-import { EVENT_TYPE_ENUM, ERROR_LEVEL_ENUM } from "./enums"
+import {
+    ERROR_LEVEL_ENUM,
+    EVENT_KIND_ENUM,
+    PERFORMANCE_TYPE_ENUM,
+    ERROR_TYPE_ENUM,
+    BEHAVIOR_TYPE_ENUM,
+    SEND_TYPE_ENUM
+} from "./enums"
 
 export type Key = string | number | symbol
+
+export type Field = string | number
 
 export type AnyObject = Record<Key, any>
 
@@ -12,15 +21,24 @@ export type MaybePromise<T> = T | Promise<T>;
 
 export type Pattern = string | RegExp | (string | RegExp)[]
 
-export interface PluginAPI<D = any> {
-    next: (data: D | TransportDataset<D>) => void;
+export type EventKind = EVENT_KIND_ENUM
+
+export type EventType = PERFORMANCE_TYPE_ENUM | ERROR_TYPE_ENUM | BEHAVIOR_TYPE_ENUM | SEND_TYPE_ENUM
+
+
+export interface BasePluginAPI<K extends Field = Field, T extends Field = Field, D = any> {
+    next: (data: D | TransportDataset<K, T, D>) => void;
     timestamp: () => number
 }
 
-export interface Plugin<D = any, C extends ClientContext = ClientContext> {
+export interface BasePlugin<
+    K extends Field = Field,
+    T extends Field = Field,
+    D = any
+> {
     name: string;
-    setup: (api: PluginAPI<D>, context: C) => MaybePromise<void>;
-    transform?: (data: D, context: C) => TransportDataset<D>
+    setup: (api: BasePluginAPI<K, T, D>) => MaybePromise<void>;
+    transform?: (data: D) => TransportDataset<K, T, D>
 }
 
 export type BaseClientOptions = {
@@ -45,24 +63,33 @@ export type BaseClientHooks = {
     backTrackerId?: () => string | number
 }
 
+
 export type ClientOptions = BaseClientOptions & BaseClientHooks
-
-export type ClientContext = {
-    options: Required<ClientOptions>
-}
-
 
 export type LogAgent = 'Chrome'
 
-export interface LogDataset<D> extends TransportDataset<D> {
+
+export interface ErrorStack {
+    message: string
+    stack: string
+}
+
+export interface BaseLogDataset<
+    K extends Field = Field,
+    T extends Field = Field,
+    D = any
+> extends
+    TransportDataset<K, T, D> {
     guid: string;
     timestamp: string;
     useragent: LogAgent;
 }
 
-export interface TransportDataset<D> {
+
+export interface TransportDataset<K extends Field = Field, T extends Field = Field, D = any> {
+    kind: K;
+    type: T;
     name: string;
-    tag: EVENT_TYPE_ENUM;
     data?: D;
     filename?: string;
     position?: string;

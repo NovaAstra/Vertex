@@ -4,6 +4,10 @@
     "version": "0.0.1",
     "main": "index.ts",
     "dependencies": {
-        "@vertex-monitro/core": "workspace:*"
+        "@vertex-monitro/core": "workspace:*",
+        "lodash-es": "~4.17.21"
+    },
+    "devDependencies": {
+        "@types/lodash-es": "~4.17.12"
     }
 }

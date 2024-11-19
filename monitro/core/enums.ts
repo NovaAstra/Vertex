@@ -6,17 +6,37 @@ export enum ERROR_LEVEL_ENUM {
     DEBUG
 }
 
-export enum EVENT_TYPE_ENUM {
-    CONSOLE,
-    CRASH,
-    XHR,
-    FETCH,
-    NETWORK,
-    LIFECYCLE,
-    DOM,
-    PROMISE,
-    SCRIPT,
-    RESOURCE,
-    UNKNOWN,
+export enum EVENT_KIND_ENUM {
+    PERFORMANCE,
+    ERROR,
+    TRANSACTION,
+    BEHAVIOR,
     CUSTOM
 }
+
+export enum PERFORMANCE_TYPE_ENUM {
+    FPS
+}
+
+export enum ERROR_TYPE_ENUM {
+    JAVASCRIPT,
+    PROMISE,
+    XHR,
+    FETCH,
+    RESOURCE
+}
+
+export enum BEHAVIOR_TYPE_ENUM {
+    ROUTE,
+    INPUT,
+    MEDIA,
+    LIFECYCLE
+}
+
+export enum SEND_TYPE_ENUM {
+    BEACON,
+    IMG,
+    GET,
+    POST
+}
+

@@ -1,6 +1,5 @@
-import type { BreadcrumbConfig } from "./types"
 
-export interface BreadcrumbOptions extends BreadcrumbConfig {
+export interface BreadcrumbOptions {
 
 }
 
