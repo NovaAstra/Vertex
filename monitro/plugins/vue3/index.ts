@@ -1,7 +1,14 @@
 import { type App, type AppConfig, type ComponentPublicInstance } from "vue"
 import {
-    type PluginAPI,
-    type Plugin,
+    type BasePlugin,
+    type BasePluginAPI,
+    type TransportDataset,
+    ERROR_LEVEL_ENUM,
+    EVENT_KIND_ENUM,
+    ERROR_TYPE_ENUM,
+    _global,
+    getLocationHref,
+    parseErrorEvent
 } from "@vertex-monitro/core"
 
 export type Vue3Instance = App;
@@ -16,10 +23,10 @@ export interface Vue3Meta {
 
 export const PLUGIN_NAME = 'VUE3_PLUGIN' as const
 
-export function Vue3Plugin(options: Vue3PluginOptions = {}): Plugin<Vue3Meta> {
+export function Vue3Plugin(options: Vue3PluginOptions = {}): BasePlugin {
     return {
         name: PLUGIN_NAME,
-        setup(api: PluginAPI<Vue3Meta>) {
+        setup(api: BasePluginAPI) {
             const { vue } = options
 
             if (!vue) return

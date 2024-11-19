@@ -8,8 +8,11 @@
 </template>
 
 <script lang="ts" setup>
-async function asyncFunctionWithError() {
-  throw new Error('Async function error'); // 触发 unhandledrejection 事件
+ function asyncFunctionWithError() {
+  setTimeout(() => {
+    throw new Error('Async function error'); // 触发 unhandledrejection 事件
+
+  }, 5000);
 }
 
 asyncFunctionWithError()

@@ -4,6 +4,7 @@
     "version": "0.0.1",
     "main": "index.ts",
     "dependencies": {
+        "@vertex/erralyze": "workspace:*",
         "@vertex-monitro/core": "workspace:*",
         "lodash-es": "~4.17.21"
     },

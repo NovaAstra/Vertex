@@ -63,6 +63,10 @@
       "projectFolder": "packages/elation"
     },
     {
+      "packageName": "@vertex/erralyze",
+      "projectFolder": "packages/erralyze"
+    },
+    {
       "packageName": "@vertex/finitio",
       "projectFolder": "packages/finitio"
     },

@@ -56,7 +56,7 @@ function resourceTransform(target: ResourceTarget): TransportDataset {
 
 function jscodeTransform(event: ErrorEvent): TransportDataset {
     const { message, filename, lineno, colno, error } = event
-
+  
     const { stack } = parseStack(error);
 
     const dataset = {

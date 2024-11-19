@@ -8,7 +8,8 @@ import {
     ERROR_TYPE_ENUM,
     _global,
     getLocationHref,
-    parseStack
+    parseStack,
+    rewriteProperty
 } from "@vertex-monitro/core"
 
 export interface XHRPluginOptions {
@@ -48,12 +49,12 @@ export enum MethodTypes {
 
 export const PLUGIN_NAME = 'XHR_PLUGIN' as const
 
-export function XHRPlugin(options: XHRPluginOptions = {}): Plugin<HttpMeta> {
+export function XHRPlugin(options: XHRPluginOptions = {}): BasePlugin {
     const originalXHRPro = XMLHttpRequest.prototype
 
     return {
         name: PLUGIN_NAME,
-        setup(api: PluginAPI<HttpMeta>) {
+        setup(api: BasePluginAPI) {
             rewriteProperty(originalXHRPro, "open", (originalOpen: VoidFunction): VoidFunction => {
                 return function (this: ExtendXMLHttpRequest, ...args: Parameters<XMLHttpRequest['open']>): void {
                     this._meta = {

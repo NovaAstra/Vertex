@@ -38,7 +38,6 @@ export function createApis<K extends Field = Field, T extends Field = Field, D =
             ? plugin.transform.call(this, data)
             : data as TransportDataset<K, T, D>
 
-        console.log(dataset)
 
         if (!this.initialized) {
             this.tasks.push(dataset)

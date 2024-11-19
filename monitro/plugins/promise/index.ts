@@ -23,7 +23,6 @@ export function PromisePlugin(): BasePlugin {
             })
         },
         transform(event: PromiseRejectionEvent): TransportDataset {
-            console.log(parseErrorEvent(event))
             // const dataset = {
             //     name: ``,
             //     kind: EVENT_KIND_ENUM.ERROR,
