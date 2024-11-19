@@ -1,29 +1,39 @@
 import { isFunction } from "lodash-es"
-import type { ClientConfig, AnyObject, Plugin, PluginAPI, TransportDataset, AnyFunction } from "./types"
-import { PluginSystem } from "./plugin"
-import { Transport } from "./transport"
-import { Breadcrumb } from "./breadcrumb"
+import type {
+    ClientOptions,
+    ClientContext,
+    AnyObject,
+    Plugin,
+    PluginAPI,
+    TransportDataset,
+    AnyFunction
+} from "./types"
+import { match, traceId } from "./utiltes";
 
-export interface ClientOptions extends ClientConfig {
+export type TraceIdCallback = (field: string, traceId: string) => void
+
+export interface BaseOptions extends ClientOptions {
+    setTraceId: (http: string, callback: TraceIdCallback) => void;
+    use(plugins: Plugin[]): Promise<void>
 }
 
-export interface ClientContext {
-    options: ClientConfig;
-}
-
-export const DEFAULT_CLIENT_OPTIONS: Partial<ClientOptions> = {
+export const DEFAULT_CLIENT_OPTIONS: ClientOptions = {
     debug: true,
     tracesSampleRate: 1,
     maxBreadcrumbs: 100,
-    attachStacktrace: true
+    attachStacktrace: true,
+    traceIdFieldName: 'X-Trace-Id',
+    enableTraceId: false,
+    includeTraceId: /.*/
 }
 
 export function createApis<D = unknown>(this: Client, plugin: Plugin<D>): PluginAPI<D> {
+    const context = this.context
     const api = Object.create(null)
 
     api.next = (data: D) => {
         const dataset = isFunction(plugin.transform)
-            ? plugin.transform.call(this, data)
+            ? plugin.transform.apply(this, [data, context])
             : data as TransportDataset<D>
 
         if (!this.initialized) {
@@ -31,32 +41,40 @@ export function createApis<D = unknown>(this: Client, plugin: Plugin<D>): Plugin
             return
         }
 
-        this.transport.send(dataset)
+        this.send(dataset)
     }
 
     return api
 }
 
-export abstract class Client implements PluginSystem {
+export function createContext(this: Client): ClientContext {
+    const context = Object.create(null)
 
-    protected abstract transport: Transport
+    context.options = this.options
 
-    protected abstract breadcrumb: Breadcrumb
+    return context as ClientContext
+}
 
-    protected readonly options: ClientOptions;
+export abstract class Client<T extends ClientOptions = ClientOptions> implements BaseOptions {
 
-    protected appid!: string;
+    protected readonly options: T;
+
+    protected appId!: string;
 
     protected initialized: boolean = false
 
     protected readonly tasks: AnyObject[] = []
 
-    public constructor(options: ClientOptions) {
+    public context!: ClientContext;
+
+    public constructor(options: T) {
         this.options = Object.assign({}, DEFAULT_CLIENT_OPTIONS, options)
 
-        this.launch().then(appid => {
-            if (appid && this.appid !== appid) {
-                this.appid = appid
+        this.context = createContext.call(this)
+
+        this.launch().then(appId => {
+            if (appId && this.appId !== appId) {
+                this.appId = appId
             }
 
             this.initialized = true
@@ -64,21 +82,33 @@ export abstract class Client implements PluginSystem {
         })
     }
 
-    public async use(plugins: Plugin[]): Promise<void> {
-        for (const plugin of plugins) {
-            const apis = createApis.call(this, plugin)
-            await plugin.setup.call(this, apis)
+    public setTraceId(http: string, callback: TraceIdCallback) {
+        const { traceIdFieldName, enableTraceId, includeTraceId } = this.options as Required<ClientOptions>
+
+        if (enableTraceId && includeTraceId && match(http, includeTraceId)) {
+            callback(traceIdFieldName, traceId())
         }
     }
 
-    protected abstract launch(): Promise<string>;
+    public async use(plugins: Plugin[]): Promise<void> {
+        const context = this.context
 
-    protected abstract nextTick(callback: AnyFunction): void
+        for (const plugin of plugins) {
+            const apis = createApis.call(this, plugin)
+            await plugin.setup.apply(this, [apis, context])
+        }
+    }
+
+    public abstract nextTick(callback: AnyFunction, task: AnyObject): void
+
+    public abstract send<D>(dataset: D): Promise<void>
+
+    protected abstract launch(): Promise<string>;
 
     private execute() {
         while (this.tasks.length) {
-            const task = this.tasks.shift();
-            this.nextTick(this.transport.send)
+            const task = this.tasks.shift()!;
+            this.nextTick(this.send, task)
         }
     }
 }

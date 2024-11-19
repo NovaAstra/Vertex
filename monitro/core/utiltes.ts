@@ -1,5 +1,6 @@
 import { customAlphabet } from 'nanoid'
-import type { AnyFunction, AnyObject, Key } from "./types"
+import { isString, isRegExp, isArray } from "lodash-es"
+import type { AnyFunction, AnyObject, Key, Pattern } from "./types"
 
 
 export function isType(type: any) {
@@ -28,6 +29,28 @@ export function rewriteProperty(
 export function getGlobal(): Window {
     if (isBrowserEnv) return window
     return {} as Window
+}
+
+export function assign<T extends AnyObject, U extends AnyObject>(
+    target: T,
+    defaults: Partial<U>,
+    options: Partial<U>
+) {
+    Object.assign(target, defaults, options) as T & Required<U>;
+}
+
+export function match(input: string, pattern: Pattern): boolean {
+    if (isString(pattern)) return input === pattern
+
+    if (isRegExp(pattern)) return pattern.test(input);
+
+    if (isArray(pattern))
+        return pattern.some(p =>
+            (isString(p) && input === p) ||
+            (isRegExp(p) && p.test(input))
+        );
+
+    return false
 }
 
 export function safeStringify(obj: object): string {
@@ -80,4 +103,6 @@ export const _global = getGlobal()
 
 export const guid = (size: number = 16): (size?: number) => string => customAlphabet(alphabet, size)
 
+export const traceId = guid(16)
 
+export const appId = guid(36)

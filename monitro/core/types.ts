@@ -10,15 +10,17 @@ export type VoidFunction = AnyFunction<any[], void>
 
 export type MaybePromise<T> = T | Promise<T>;
 
-export interface PluginAPI<D = unknown> {
+export type Pattern = string | RegExp | (string | RegExp)[]
+
+export interface PluginAPI<D = any> {
     next: (data: D | TransportDataset<D>) => void;
     timestamp: () => number
 }
 
-export interface Plugin<D = any> {
+export interface Plugin<D = any, C extends ClientContext = ClientContext> {
     name: string;
-    setup: (api: PluginAPI<D>) => MaybePromise<void>;
-    transform?: (data: D) => TransportDataset<D>
+    setup: (api: PluginAPI<D>, context: C) => MaybePromise<void>;
+    transform?: (data: D, context: C) => TransportDataset<D>
 }
 
 export type BaseClientOptions = {
@@ -26,13 +28,17 @@ export type BaseClientOptions = {
     disabled?: boolean
     debug?: boolean;
     record?: boolean;
-    localization?: boolean
-    enableTraceId?: boolean
+    localization?: boolean;
+
+    enableTraceId?: boolean;
+    traceIdFieldName?: string;
+    includeTraceId?: Pattern
+
     tracesSampleRate?: number;
     maxBreadcrumbs?: number;
     attachStacktrace?: boolean;
-    ignoreErrors?: Array<string | RegExp>;
-    ignoreRequest?: Array<string | RegExp>;
+    ignoreErrors?: Pattern;
+    ignoreRequest?: Pattern;
 }
 
 export type BaseClientHooks = {
@@ -40,6 +46,10 @@ export type BaseClientHooks = {
 }
 
 export type ClientOptions = BaseClientOptions & BaseClientHooks
+
+export type ClientContext = {
+    options: Required<ClientOptions>
+}
 
 
 export type LogAgent = 'Chrome'
