@@ -1,9 +1,13 @@
 import {
-    type VoidFunction,
-    type AnyObject,
-    type Plugin,
+    type BasePlugin,
+    type BasePluginAPI,
+    type TransportDataset,
+    ERROR_LEVEL_ENUM,
+    EVENT_KIND_ENUM,
+    ERROR_TYPE_ENUM,
     _global,
-    rewriteProperty,
+    getLocationHref,
+    parseErrorEvent
 } from "@vertex-monitro/core"
 
 export interface CrashPluginOptions {

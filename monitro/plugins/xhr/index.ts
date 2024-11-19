@@ -1,9 +1,14 @@
 import {
-    type VoidFunction,
+    type BasePlugin,
+    type BasePluginAPI,
+    type TransportDataset,
     type AnyObject,
-    type Plugin,
-    type PluginAPI,
-    rewriteProperty
+    ERROR_LEVEL_ENUM,
+    EVENT_KIND_ENUM,
+    ERROR_TYPE_ENUM,
+    _global,
+    getLocationHref,
+    parseStack
 } from "@vertex-monitro/core"
 
 export interface XHRPluginOptions {

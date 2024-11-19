@@ -1,0 +1,9 @@
+{
+  "name": "@vertex-monitro-plugin/network",
+  "type": "module",
+  "version": "0.0.1",
+  "main": "index.ts",
+  "dependencies": {
+    "@vertex-monitro/core": "workspace:*"
+  }
+}
