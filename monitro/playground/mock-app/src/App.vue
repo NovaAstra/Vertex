@@ -13,6 +13,10 @@
     throw new Error('Async function error'); // 触发 unhandledrejection 事件
 
   }, 5000);
+  setTimeout(() => {
+    Promise.reject("sadas")
+    Promise.reject(new Error("sadadasdas"))
+  }, 3000);
 }
 
 asyncFunctionWithError()
