@@ -19,7 +19,7 @@ async function bootstrap() {
         (event: ErrorEvent) => {
             event.preventDefault();
 
-            console.log(parse(event), 1)
+            console.log(parse(event))
         },
         true)
     window.addEventListener(
@@ -27,7 +27,7 @@ async function bootstrap() {
         (event: PromiseRejectionEvent) => {
             event.preventDefault();
 
-            console.log(parse(event), event)
+            console.log(parse(event))
         },
         true)
 }

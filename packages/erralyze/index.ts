@@ -99,6 +99,8 @@ export interface StackFrame {
     * @example "/assets/missing-image.png"
     */
     link?: string;
+
+    function?: string;
 }
 
 
@@ -113,7 +115,100 @@ export interface StackFrame {
  *  at eval (eval at <anonymous> (http://example.com/script.js:30:10), <anonymous>:1:1)
  * ```
  */
-const CHROME_IE_STACK_REGEXP = /^\s*at .*(\S+:\d+|\(native\))/m
+const CHROME_IE_STACK_REGEXP = /^\s*at .*(\S+:\d+|\(native\))/m;
+
+
+/**
+ * Regular expression to match stack trace lines from Opera 9.
+ * 
+ * Opera 9's error stack traces have the following format:
+ * 
+ * ```ts
+ * Error: Something went wrong
+ * Line 42 of script in http://example.com/script.js
+ * Line 100 of script in http://example.com/another.js
+ * ```
+ * 
+ * This regular expression extracts the line number and the script file (or URL)
+ * from error messages in Opera 9, which follow the pattern:
+ * "Line <line_number> of script (in) <script_file_or_url>".
+ * 
+ * Example usage:
+ * ```ts
+ * const errorMessage = "Line 42 of script in http://example.com/script.js";
+ * const match = OPERA_9_STACK_REGEXP.exec(errorMessage);
+ * if (match) {
+ *   const lineNumber = match[1]; // 42
+ *   const scriptFile = match[2]; // http://example.com/script.js
+ * }
+ * ```
+ */
+const OPERA_9_STACK_REGEXP = /Line (\d+).*script (?:in )?(\S+)/i;
+
+/**
+ * Regular expression to match stack trace lines from Opera 9, with optional function name extraction.
+ * 
+ * Opera 9's error stack traces have the following format:
+ * 
+ * ```ts
+ * Error: Something went wrong
+ * Line 42 of script in http://example.com/script.js
+ * Line 100 of script in http://example.com/another.js: In function someFunction
+ * ```
+ * 
+ * This regular expression extracts:
+ * - The **line number** where the error occurred.
+ * - The **script file (or URL)** involved in the error.
+ * - Optionally, the **function name** where the error occurred (if provided in the stack trace).
+ * 
+ * Example usage:
+ * ```ts
+ * const errorMessage = "Line 42 of script in http://example.com/script.js: In function someFunction";
+ * const match = OPERA_10_STACK_REGEXP.exec(errorMessage);
+ * if (match) {
+ *   const lineNumber = match[1]; // 42
+ *   const scriptFile = match[2]; // http://example.com/script.js
+ *   const functionName = match[3]; // someFunction (if available)
+ * }
+ * ```
+ */
+const OPERA_10_STACK_REGEXP = /Line (\d+).*script (?:in )?(\S+)(?:: In function (\S+))?$/i;
+
+
+/**
+ * Regular expression to match stack trace lines from Firefox and Safari.
+ * 
+ * This regular expression is designed to match stack trace entries that follow the 
+ * typical format seen in Firefox and Safari, which usually contain the function name 
+ * or script path followed by the line number.
+ * 
+ * Common stack trace formats for Firefox and Safari:
+ * 
+ * ```ts
+ * at foo (http://example.com/script.js:10:15)
+ * at bar (native)
+ * at myFunction (C:/path/to/file.js:20:5)
+ * ```
+ * 
+ * The regular expression matches:
+ * - A function name or script URL, followed by a colon (`:`) and the line number.
+ * - It optionally matches an `@` symbol at the beginning of the line, which is commonly used in stack traces.
+ * 
+ * Explanation:
+ * - `(^|@)`: Matches the start of the line (`^`) or an `@` symbol (if present).
+ * - `\S+`: Matches one or more non-whitespace characters (the function name or script URL).
+ * - `:\d+`: Matches a colon followed by one or more digits (the line number).
+ * 
+ * Example matches:
+ * - `"at foo (http://example.com/script.js:10:15)"` → matches `http://example.com/script.js:10`
+ * - `"at bar (native)"` → matches `native`
+ * - `"at myFunction (C:/path/to/file.js:20:5)"` → matches `C:/path/to/file.js:20`
+ * 
+ * This regular expression is case-insensitive and captures the script location and line number.
+ */
+const FIREFOX_SAFARI_STACK_REGEXP = /(^|@)\S+:\d+/;
+
+const SAFARI_NATIVE_CODE_REGEXP = /^(eval@)?(\[native code\])?$/
 
 /**
  * Type guard to determine if the provided event is a PromiseRejectedResult.
@@ -133,7 +228,7 @@ function serialize<T extends StackEvent>(event: T, space: number = 2): string {
     return JSON.stringify(event, null, space);
 }
 
-function applySlice<T>(lines: T[], options?: StackTraceParseOptions) {
+function applySlice<T>(lines: T[], options?: StackTraceParseOptions): T[] {
     if (options && options.frameRange != null) {
         if (Array.isArray(options.frameRange))
             return lines.slice(options.frameRange[0], options.frameRange[1])
@@ -181,7 +276,7 @@ export function parseLocation(urlLike: string): [string, string | undefined, str
     return [parts[1], parts[2] || undefined, parts[3] || undefined] as const;
 }
 
-export function parseStack(error: Error, options?: StackTraceParseOptions) {
+export function parseStack(error: Error, options?: StackTraceParseOptions): StackFrame[] {
     // @ts-expect-error missing stacktrace property
     if (typeof (error).stacktrace !== 'undefined' || typeof error['opera#sourceloc'] !== 'undefined') {
         return parseOpera(error, options)
@@ -190,37 +285,206 @@ export function parseStack(error: Error, options?: StackTraceParseOptions) {
     } else if (error.stack) {
         return parseFFOrSafari(error);
     } else if (options?.allowMissing) {
-        return {} as StackFrame
+        return [];
     } else {
-        return {
+        return [{
             type: 'unknow error',
             message: 'unknow error',
             stack: serialize(error)
-        } as StackFrame
+        }] as StackFrame[]
     }
 }
 
-export function parseOpera(error: Error, options?: StackTraceParseOptions) {
+export function parseOpera(error: Error, options?: StackTraceParseOptions): StackFrame[] {
+    // @ts-expect-error missing stacktrace property
+    if (!error.stacktrace || (error.message.includes('\n') && error.message.split('\n').length > error.stacktrace.split('\n').length))
+        return parseOpera9(error)
 
+    else if (!error.stack)
+        return parseOpera10(error)
+
+    else
+        return parseOpera11(error, options)
 }
 
-export function parseFFOrSafari(error: Error, options?: StackTraceParseOptions) {
+export function parseOpera9(error: Error, options?: StackTraceParseOptions): StackFrame[] {
+    const lines = error.message?.split('\n') || [];
 
+    const result: StackFrame[] = [];
+
+    for (let i = 2; i < lines.length; i += 2) {
+        const match = OPERA_9_STACK_REGEXP.exec(lines[i]);
+        if (match) {
+            const [, lineno, filename] = match;
+            result.push({
+                filename,
+                message: lines[i],
+                lineno: parseInt(lineno, 10),
+                stack: error.message,
+                type: "error",
+            });
+        }
+    }
+
+    return applySlice(result, options);
+}
+
+export function parseOpera10(error: Error, options?: StackTraceParseOptions): StackFrame[] {
+    // Ensure `stacktrace` property exists, or fallback if needed
+    // @ts-expect-error missing stack property
+    const stacktrace = error.stacktrace || error.stack;  // fallback to `stack` if `stacktrace` is undefined
+    if (!stacktrace) {
+        return [];
+    }
+
+    // Split the stack trace by line breaks
+    const lines = stacktrace?.split('\n') || [];
+    const result: StackFrame[] = [];
+
+    for (let i = 2; i < lines.length; i += 2) {
+        const match = OPERA_10_STACK_REGEXP.exec(lines[i]);
+        if (match) {
+            result.push({
+                filename: match[2],
+                function: match[3],
+                message: lines[i],
+                lineno: parseInt(match[1], 10),
+                stack: stacktrace,
+                type: "error",
+            });
+        }
+    }
+
+    return applySlice(result, options);
+}
+
+export function parseOpera11(error: Error, options?: StackTraceParseOptions): StackFrame[] {
+    const stack = error.stack || '';
+
+    const lines = applySlice(
+        stack.split('\n')
+            .filter(line =>
+                FIREFOX_SAFARI_STACK_REGEXP.test(line)
+                && !line.startsWith('Error created at')),
+        options
+    );
+
+    return lines.map<StackFrame>((line) => {
+        const tokens = line.split('@');
+        const location = parseLocation(tokens.pop()!);
+
+        const functionCall = tokens.shift() || '';
+        const functionName = functionCall
+            .replace(/<anonymous function(: (\w+))?>/, '$2')
+            .replace(/\([^)]*\)/g, '')
+            || undefined;
+
+
+        const argsRaw = functionCall.match(/\(([^)]*)\)/)?.[1];
+        const args = argsRaw && argsRaw !== '[arguments not available]'
+            ? argsRaw.split(',').map(arg => arg.trim())
+            : undefined;
+
+        return {
+            function: functionName,
+            args,
+            message: line,
+            filename: location[0],
+            lineno: location[1] ? +location[1] : undefined,
+            colno: location[2] ? +location[2] : undefined,
+            stack,
+            type: 'error'
+        } as StackFrame;
+    });
+}
+
+export function parseFFOrSafari(error: Error, options?: StackTraceParseOptions): StackFrame[] {
+    return parseFFOrSafariString(error.stack!, options)
+}
+
+export function parseFFOrSafariString(stack: string, options?: StackTraceParseOptions): StackFrame[] {
+    const lines = applySlice(
+        stack.split('\n').filter((line) => {
+            return !line.match(SAFARI_NATIVE_CODE_REGEXP)
+        }),
+        options,
+    )
+
+    return lines.map<StackFrame>((line) => {
+        // Throw away eval information until we implement stacktrace.js/stackframe#8
+        if (line.includes(' > eval'))
+            line = line.replace(/ line (\d+)(?: > eval line \d+)* > eval:\d+:\d+/g, ':$1')
+
+        if (!line.includes('@') && !line.includes(':')) {
+            // Safari eval frames only have function names and nothing else
+            return {
+                function: line,
+                stack,
+                type: "error"
+            } as StackFrame
+        }
+        else {
+            // eslint-disable-next-line regexp/no-super-linear-backtracking, regexp/optimal-quantifier-concatenation
+            const functionNameRegex = /(([^\n\r"\u2028\u2029]*".[^\n\r"\u2028\u2029]*"[^\n\r@\u2028\u2029]*(?:@[^\n\r"\u2028\u2029]*"[^\n\r@\u2028\u2029]*)*(?:[\n\r\u2028\u2029][^@]*)?)?[^@]*)@/
+            const matches = line.match(functionNameRegex)
+            const functionName = (matches && matches[1]) ? matches[1] : undefined
+            const locationParts = parseLocation(line.replace(functionNameRegex, ''))
+
+            return {
+                function: functionName,
+                filename: locationParts[0],
+                lineno: locationParts[1] ? +locationParts[1] : undefined,
+                colno: locationParts[2] ? +locationParts[2] : undefined,
+                message: line,
+                stack,
+                type: "error"
+            } as StackFrame
+        }
+    })
 }
 
 export function parseV8OrIE(error: Error, options?: StackTraceParseOptions) {
-    return parseV8OrIeString(error, error.stack!, options);
+    return parseV8OrIeString(error.stack!, options);
 }
 
-export function parseV8OrIeString(error: Error, stack: string, options?: StackTraceParseOptions) {
-    const filtered = applySlice(
+export function parseV8OrIeString(stack: string, options?: StackTraceParseOptions) {
+    const lines = applySlice(
         stack.split('\n').filter((line) => {
             return !!line.match(CHROME_IE_STACK_REGEXP)
         }),
         options,
     )
 
-    console.log(filtered)
+    return lines.map<StackFrame>((line) => {
+        if (line.includes('(eval ')) {
+            // Throw away eval information until we implement stacktrace.js/stackframe#8
+            line = line.replace(/eval code/g, 'eval').replace(/(\(eval at [^()]*)|(,.*$)/g, '')
+        }
+        let sanitizedLine = line.replace(/^\s+/, '').replace(/\(eval code/g, '(').replace(/^.*?\s+/, '')
+
+        // capture and preseve the parenthesized location "(/foo/my bar.js:12:87)" in
+        // case it has spaces in it, as the string is split on \s+ later on
+        const location = sanitizedLine.match(/ (\(.+\)$)/)
+
+        // remove the parenthesized location from the line, if it was matched
+        sanitizedLine = location ? sanitizedLine.replace(location[0], '') : sanitizedLine
+
+        // if a location was matched, pass it to extractLocation() otherwise pass all sanitizedLine
+        // because this line doesn't have function name
+        const locationParts = parseLocation(location ? location[1] : sanitizedLine)
+        const functionName = (location && sanitizedLine) || undefined
+        const filename = ['eval', '<anonymous>'].includes(locationParts[0]) ? undefined : locationParts[0]
+
+        return {
+            function: functionName,
+            filename,
+            lineno: locationParts[1] ? +locationParts[1] : undefined,
+            colno: locationParts[2] ? +locationParts[2] : undefined,
+            stack,
+            type: 'error',
+            message: line
+        } as StackFrame
+    })
 }
 
 export function parseError<T>(input: T) {
@@ -247,11 +511,11 @@ export function parse<T extends StackEvent = StackEvent>(input: T) {
     }
 
     if (isPromiseRejectionEvent(input)) {
-        return parseStack(input.reason)
+        return parseStack(input.reason)[0]
     }
 
     if (input instanceof Error) {
-        return parseStack(input)
+        return parseStack(input)[0]
     }
 
     const { target } = input
@@ -279,13 +543,21 @@ export function parse<T extends StackEvent = StackEvent>(input: T) {
         }
     }
 
-    if (input.error || input instanceof ErrorEvent) {
-        const e = input.error
-        e.fileName = e.filename || input.filename
-        e.columnNumber = e.colno || input.colno
-        e.lineNumber = e.lineno || input.lineno
+    if (input instanceof ErrorEvent) {
+        if (input.filename) {
+            const { message, error, lineno, filename, colno, type } = input
 
-        return parseStack(e)
+            return {
+                message,
+                stack: error.stack,
+                lineno,
+                colno,
+                filename,
+                type
+            }
+        }
+
+        return parseStack(input.error)[0];
     }
 
     return {
