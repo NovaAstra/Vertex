@@ -10,15 +10,10 @@ async function bootstrap() {
     //     dsn: "localhost:8001",
     // })
 
-    const app = createApp(App)
-
-    app.mount('#app')
-
     window.addEventListener(
         "error",
         (event: ErrorEvent) => {
             event.preventDefault();
-
             console.log(parse(event))
         },
         true)
@@ -26,10 +21,16 @@ async function bootstrap() {
         "unhandledrejection",
         (event: PromiseRejectionEvent) => {
             event.preventDefault();
-
             console.log(parse(event))
+
         },
         true)
+
+    const app = createApp(App)
+
+    app.mount('#app')
+
+
 }
 
 bootstrap()

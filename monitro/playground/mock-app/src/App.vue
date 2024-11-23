@@ -8,7 +8,7 @@
 </template>
 
 <script lang="ts" setup>
- function asyncFunctionWithError() {
+ function a() {
   setTimeout(() => {
     throw new Error('Async function error'); // 触发 unhandledrejection 事件
 
@@ -17,7 +17,8 @@
     Promise.reject("sadas")
     Promise.reject(new Error("sadadasdas"))
   }, 3000);
+
 }
 
-asyncFunctionWithError()
+a()
 </script>

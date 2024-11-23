@@ -2,8 +2,5 @@
   "name": "@vertex/erralyze",
   "type": "module",
   "main": "index.ts",
-  "version": "0.0.1",
-  "dependencies": {
-    "error-stack-parser-es": "~0.1.5"
-  }
+  "version": "0.0.1"
 }
