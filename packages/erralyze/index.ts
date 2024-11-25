@@ -328,19 +328,28 @@ function formattedStack<T extends StackFrame = StackFrame, D extends StackTrace 
  * // Returns: ["native", undefined, undefined]
  */
 export function parseLocation(urlLike: string): [string, string | undefined, string | undefined] {
-    // Fast path: If the string does not contain a colon, treat it as a single location.
+    // If no colon exists, it's a single location (fast path).
     if (!urlLike.includes(':')) {
-        return [urlLike, undefined, undefined];
+        return [urlLike.trim(), undefined, undefined];
     }
 
-    // Regular expression to capture the file path, line number, and column number.
+    // Regular expression to extract file path, line, and column numbers.
     const regExp = /(.+?)(?::(\d+))?(?::(\d+))?$/;
 
-    // Remove parentheses and match the string against the regular expression.
-    const parts = regExp.exec(urlLike.replace(/[()]/g, ''))!;
+    // Remove enclosing parentheses (e.g., "at (file.js:10:15)" -> "file.js:10:15").
+    const sanitized = urlLike.replace(/[()]/g, '').trim();
 
-    // Return the matched groups, ensuring undefined for missing line or column numbers.
-    return [parts[1], parts[2] || undefined, parts[3] || undefined] as const;
+    // Match against the regular expression.
+    const match = sanitized.match(regExp);
+
+    if (!match) {
+        // If no match, treat the input as a single location.
+        return [sanitized, undefined, undefined];
+    }
+
+    /// Extract and return the matched groups.
+    const [, filename, lineno, colno] = match;
+    return [filename.trim(), lineno, colno] as const;
 }
 
 export function parseStack(error: Error, options?: StackTraceParseOptions): StackFrame[] {

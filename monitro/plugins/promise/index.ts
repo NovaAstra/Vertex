@@ -1,14 +1,10 @@
 import {
     type BasePlugin,
     type BasePluginAPI,
-    type TransportDataset,
-    ERROR_LEVEL_ENUM,
-    EVENT_KIND_ENUM,
-    ERROR_TYPE_ENUM,
+    type AnyObject,
     _global,
-    getLocationHref,
-    parseErrorEvent
 } from "@vertex-monitro/core"
+import {parse} from "@vertex/erralyze"
 
 export const PLUGIN_NAME = 'PROMISE_PLUGIN' as const
 
@@ -22,17 +18,8 @@ export function PromisePlugin(): BasePlugin {
                 api.next(event)
             })
         },
-        transform(event: PromiseRejectionEvent): TransportDataset {
-            // const dataset = {
-            //     name: ``,
-            //     kind: EVENT_KIND_ENUM.ERROR,
-            //     type: ERROR_TYPE_ENUM.PROMISE,
-            //     level: ERROR_LEVEL_ENUM.ERROR,
-            //     message: `Unable to load "${target.src || target.href}"`,
-            //     route: getLocationHref()
-            // }
-
-            return {} as any
+        transform(event: AnyObject) {
+            return parse(event as ErrorEvent)
         }
     }
 }

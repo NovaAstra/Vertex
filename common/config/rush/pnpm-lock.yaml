@@ -29,9 +29,6 @@ importers:
 
   ../../monitro/clients/browser:
     dependencies:
-      '@vertex-monitro-plugin/crash':
-        specifier: workspace:*
-        version: link:../../plugins/crash
       '@vertex-monitro-plugin/lifecycle':
         specifier: workspace:*
         version: link:../../plugins/lifecycle
@@ -41,9 +38,6 @@ importers:
       '@vertex-monitro-plugin/stack':
         specifier: workspace:*
         version: link:../../plugins/stack
-      '@vertex-monitro-plugin/vue3':
-        specifier: workspace:*
-        version: link:../../plugins/vue3
       '@vertex-monitro-plugin/xhr':
         specifier: workspace:*
         version: link:../../plugins/xhr
@@ -122,6 +116,9 @@ importers:
       '@vertex-monitro/core':
         specifier: workspace:*
         version: link:../../core
+      '@vertex/erralyze':
+        specifier: workspace:*
+        version: link:../../../packages/erralyze
 
   ../../monitro/plugins/stack:
     dependencies:
@@ -144,6 +141,9 @@ importers:
       '@vertex-monitro/core':
         specifier: workspace:*
         version: link:../../core
+      '@vertex/erralyze':
+        specifier: workspace:*
+        version: link:../../../packages/erralyze
     devDependencies:
       vue:
         specifier: ^3.5.13

@@ -10,11 +10,9 @@
     "@vertex-monitro/core": "workspace:*",
     "lodash-es": "~4.17.21",
     "@vertex-monitro-plugin/xhr": "workspace:*",
-    "@vertex-monitro-plugin/crash": "workspace:*",
     "@vertex-monitro-plugin/lifecycle": "workspace:*",
     "@vertex-monitro-plugin/promise": "workspace:*",
-    "@vertex-monitro-plugin/stack": "workspace:*",
-    "@vertex-monitro-plugin/vue3": "workspace:*"
+    "@vertex-monitro-plugin/stack": "workspace:*"
   },
   "devDependencies": {
     "vite": "^5.4.11",

@@ -1,9 +1,6 @@
 import { customAlphabet } from 'nanoid'
-import { isString, isRegExp, isArray, map, filter } from "lodash-es"
-import type { AnyFunction, AnyObject, Key, Pattern, ErrorStack } from "./types"
-
-const FULL_MATCH =
-    /^\s*at (?:(.*?) ?\()?((?:file|https?|blob|chrome-extension|address|native|eval|webpack|<anonymous>|[-a-z]+:|.*bundle|\/).*?)(?::(\d+))?(?::(\d+))?\)?\s*$/i;
+import { isString, isRegExp, isArray } from "lodash-es"
+import type { AnyFunction, AnyObject, Key, Pattern } from "./types"
 
 
 export function isType(type: any) {
@@ -71,108 +68,6 @@ export function getLocationHref(): string {
     return document.location.href
 }
 
-export function isPromiseRejectedResult(
-    event: ErrorEvent | PromiseRejectionEvent
-): event is PromiseRejectionEvent {
-    return (event as PromiseRejectionEvent).reason !== undefined
-}
-
-export function parseStack(error: Error): ErrorStack {
-    const { stack = '', message = '' } = error
-    const result = { message: message, stack: stack }
-
-    if (stack) {
-        const rChromeCallStack = /^\s*at\s*([^(]+)\s*\((.+?):(\d+):(\d+)\)$/
-        const rMozlliaCallStack = /^\s*([^@]*)@(.+?):(\d+):(\d+)$/
-        const callStackStr = stack.replace(
-            new RegExp(`^[\\w\\s:]*${message}\n`),
-            ''
-        )
-        const callStackFrameList = map(
-            filter(callStackStr.split('\n'), (item: string) => item),
-            (str: string) => {
-                const chromeErrResult = str.match(rChromeCallStack)
-                if (chromeErrResult) {
-                    return {
-                        triggerPageUrl: chromeErrResult[2],
-                        line: chromeErrResult[3],
-                        col: chromeErrResult[4]
-                    }
-                }
-
-                const mozlliaErrResult = str.match(rMozlliaCallStack)
-                if (mozlliaErrResult) {
-                    return {
-                        triggerPageUrl: mozlliaErrResult[2],
-                        line: mozlliaErrResult[3],
-                        col: mozlliaErrResult[4]
-                    }
-                }
-                return {}
-            }
-        )
-        const item = callStackFrameList[0] || {}
-        return { ...result, ...item }
-    }
-    return result
-}
-
-export function parseError(error: any) {
-    if (error instanceof Error) {
-        return parseStack(error)
-    }
-
-    if (error.message) return parseStack(error)
-
-    if (typeof error === 'string') return { message: error }
-
-    if (isArray(error))
-        return { message: error.join(';') }
-
-    return {}
-}
-
-export function parseErrorEvent(event: ErrorEvent | PromiseRejectionEvent) {
-    if (isPromiseRejectedResult(event)) {
-        return { ...parseError(event.reason) }
-    }
-
-    const { target } = event
-    if (target instanceof HTMLElement) {
-        if (target.nodeType === 1) {
-            const result = {
-                initiatorType: target.nodeName.toLowerCase(),
-                requestUrl: ''
-            }
-            switch (target.nodeName.toLowerCase()) {
-                case 'link':
-                    result.requestUrl = (target as HTMLLinkElement).href
-                    break
-                default:
-                    result.requestUrl =
-                        (target as HTMLImageElement).currentSrc ||
-                        (target as HTMLScriptElement).src
-            }
-            return result
-        }
-    }
-
-    if (event.error) {
-        const e = event.error
-        e.fileName = e.filename || event.filename
-        e.columnNumber = e.colno || event.colno
-        e.lineNumber = e.lineno || event.lineno
-        return { ...parseError(e) }
-    }
-
-
-    return {
-        line: (_global as any).event.errorLine,
-        col: (_global as any).event.errorCharacter,
-        errMessage: (_global as any).event.errorMessage,
-        triggerPageUrl: (_global as any).event.errorUrl
-    }
-}
 
 export function safeStringify(obj: object): string {
     const set = new Set()
@@ -222,16 +117,17 @@ export const microtask: AnyFunction<[AnyFunction]> =
         };
 
 
-const alphabet = '23456789ABCDEFGHJKLMNPQRSTWXYZabcdefghijkmnopqrstuvwxyz';
+export const alphabet = '23456789ABCDEFGHJKLMNPQRSTWXYZabcdefghijkmnopqrstuvwxyz';
 
 export const isWindow = isType('Window')
 
 export const isBrowserEnv = isWindow(typeof window !== 'undefined' ? window : 0)
-
-export const _global = getGlobal()
 
 export const guid = (size: number = 16): (size?: number) => string => customAlphabet(alphabet, size)
 
 export const traceId = guid(16)
 
 export const appId = guid(36)
+
+export const _global = getGlobal()
+
