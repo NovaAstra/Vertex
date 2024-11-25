@@ -35,6 +35,10 @@ export function createApis(
         this.nextTick(this.send, dataset)
     }
 
+    api.emit = (data: AnyObject) => {
+        this.nextTick(this.send, data)
+    }
+
     return api
 }
 

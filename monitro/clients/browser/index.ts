@@ -15,6 +15,7 @@ import {
 } from "@vertex-monitro/core"
 import { StackPlugin } from "@vertex-monitro-plugin/stack"
 import { PromisePlugin } from "@vertex-monitro-plugin/promise"
+import { PerformancePlugin } from "@vertex-monitro-plugin/performance"
 
 
 export type BrowserPlugin = BasePlugin
@@ -52,22 +53,24 @@ export class BrowserClient extends Client {
     }
 
     public nextTick(callback: AnyFunction, task: AnyObject) {
-        return microtask(() => callback(task))
+        const { dsn } = this.options
+        return microtask(() => callback(dsn!, task))
     }
 
     public async send(url: string, data: AnyObject) {
-        const type = sendType(data)
-        switch (type) {
-            case 1:
-                sendByBeacon(url, data)
-                break
-            case 2:
-                sendByImage(url, data)
-                break
-            default:
-                sendByXML(url, data)
-                break
-        }
+        console.log(data)
+        // const type = sendType(data)
+        // switch (type) {
+        //     case 1:
+        //         sendByBeacon(url, data)
+        //         break
+        //     case 2:
+        //         sendByImage(url, data)
+        //         break
+        //     default:
+        //         sendByXML(url, data)
+        //         break
+        // }
     }
 }
 
@@ -77,6 +80,7 @@ export function MonitroClient(options: BrowserOptions) {
     const plugins: BrowserPlugin[] = [
         StackPlugin(),
         PromisePlugin(),
+        PerformancePlugin()
     ]
 
     if (Array.isArray(options.plugins)) plugins.push(...options.plugins)

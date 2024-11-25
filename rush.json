@@ -43,6 +43,10 @@
       "projectFolder": "monitro/plugins/lifecycle"
     },
     {
+      "packageName": "@vertex-monitro-plugin/performance",
+      "projectFolder": "monitro/plugins/performance"
+    },
+    {
       "packageName": "@vertex-monitro-plugin/promise",
       "projectFolder": "monitro/plugins/promise"
     },

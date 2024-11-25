@@ -14,6 +14,7 @@ export type Pattern = string | RegExp | (string | RegExp)[]
 
 export interface BasePluginAPI {
     next: (data: AnyObject) => void;
+    emit: (data: AnyObject) => void;
 }
 
 export interface BasePlugin {

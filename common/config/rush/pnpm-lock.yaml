@@ -29,6 +29,9 @@ importers:
 
   ../../monitro/clients/browser:
     dependencies:
+      '@vertex-monitro-plugin/performance':
+        specifier: workspace:*
+        version: link:../../plugins/performance
       '@vertex-monitro-plugin/promise':
         specifier: workspace:*
         version: link:../../plugins/promise
@@ -104,6 +107,15 @@ importers:
       '@vertex-monitro/core':
         specifier: workspace:*
         version: link:../../core
+
+  ../../monitro/plugins/performance:
+    dependencies:
+      '@vertex-monitro/core':
+        specifier: workspace:*
+        version: link:../../core
+      web-vitals:
+        specifier: ~4.2.4
+        version: 4.2.4
 
   ../../monitro/plugins/promise:
     dependencies:
@@ -994,6 +1006,9 @@ packages:
       typescript:
         optional: true
 
+  web-vitals@4.2.4:
+    resolution: {integrity: sha512-r4DIlprAGwJ7YM11VZp4R884m0Vmgr6EAKe3P+kO0PPj3Unqyvv59rczf6UiGcb9Z8QxZVcqKNwv/g0WNdWwsw==}
+
   why-is-node-running@2.3.0:
     resolution: {integrity: sha512-hUrmaWBdVDcxvYqnyh09zunKzROWjbZTiNy8dBEjkS7ehEDQibXJ7XvlmtbwuTclUiIyN+CyXQD4Vmko8fNm8w==}
     engines: {node: '>=8'}
@@ -1776,6 +1791,8 @@ snapshots:
       '@vue/shared': 3.5.13
     optionalDependencies:
       typescript: 5.6.3
+
+  web-vitals@4.2.4: {}
 
   why-is-node-running@2.3.0:
     dependencies:

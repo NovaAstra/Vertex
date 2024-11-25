@@ -1,0 +1,10 @@
+{
+    "name": "@vertex-monitro-plugin/performance",
+    "type": "module",
+    "version": "0.0.1",
+    "main": "index.ts",
+    "dependencies": {
+      "@vertex-monitro/core": "workspace:*",
+      "web-vitals": "~4.2.4"
+    }
+}
