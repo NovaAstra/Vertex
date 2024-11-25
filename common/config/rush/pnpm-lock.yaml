@@ -163,11 +163,7 @@ importers:
         specifier: workspace:*
         version: link:../typify
 
-  ../../packages/erralyze:
-    dependencies:
-      error-stack-parser-es:
-        specifier: ~0.1.5
-        version: 0.1.5
+  ../../packages/erralyze: {}
 
   ../../packages/finitio: {}
 
@@ -670,9 +666,6 @@ packages:
   entities@4.5.0:
     resolution: {integrity: sha512-V0hjH4dGPh9Ao5p0MoRY6BVqtwCjhz6vI5LT8AJ55H+4g9/4vbHx1I54fS0XuclLhDHArPQCiMjDxjaL8fPxhw==}
     engines: {node: '>=0.12'}
-
-  error-stack-parser-es@0.1.5:
-    resolution: {integrity: sha512-xHku1X40RO+fO8yJ8Wh2f2rZWVjqyhb1zgq1yZ8aZRQkv6OOKhKWRUaht3eSCUbAOBaKIgM+ykwFLE+QUxgGeg==}
 
   es-module-lexer@1.5.4:
     resolution: {integrity: sha512-MVNK56NiMrOwitFB7cqDwq0CQutbw+0BvLshJSse0MUNU+y1FC3bUS/AQg7oUng+/wKrrki7JfmwtVHkVfPLlw==}
@@ -1462,8 +1455,6 @@ snapshots:
   deep-eql@5.0.2: {}
 
   entities@4.5.0: {}
-
-  error-stack-parser-es@0.1.5: {}
 
   es-module-lexer@1.5.4: {}
 
