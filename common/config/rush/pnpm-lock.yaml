@@ -29,18 +29,12 @@ importers:
 
   ../../monitro/clients/browser:
     dependencies:
-      '@vertex-monitro-plugin/lifecycle':
-        specifier: workspace:*
-        version: link:../../plugins/lifecycle
       '@vertex-monitro-plugin/promise':
         specifier: workspace:*
         version: link:../../plugins/promise
       '@vertex-monitro-plugin/stack':
         specifier: workspace:*
         version: link:../../plugins/stack
-      '@vertex-monitro-plugin/xhr':
-        specifier: workspace:*
-        version: link:../../plugins/xhr
       '@vertex-monitro/core':
         specifier: workspace:*
         version: link:../../core

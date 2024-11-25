@@ -13,10 +13,8 @@ import {
     microtask,
     appId
 } from "@vertex-monitro/core"
-import { XHRPlugin } from "@vertex-monitro-plugin/xhr"
 import { StackPlugin } from "@vertex-monitro-plugin/stack"
 import { PromisePlugin } from "@vertex-monitro-plugin/promise"
-import { LifecyclePlugin } from "@vertex-monitro-plugin/lifecycle"
 
 
 export type BrowserPlugin = BasePlugin
@@ -77,10 +75,8 @@ export function MonitroClient(options: BrowserOptions) {
     const client = new BrowserClient(options);
 
     const plugins: BrowserPlugin[] = [
-        XHRPlugin(),
         StackPlugin(),
         PromisePlugin(),
-        LifecyclePlugin()
     ]
 
     if (Array.isArray(options.plugins)) plugins.push(...options.plugins)

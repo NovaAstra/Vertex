@@ -9,8 +9,6 @@
   "dependencies": {
     "@vertex-monitro/core": "workspace:*",
     "lodash-es": "~4.17.21",
-    "@vertex-monitro-plugin/xhr": "workspace:*",
-    "@vertex-monitro-plugin/lifecycle": "workspace:*",
     "@vertex-monitro-plugin/promise": "workspace:*",
     "@vertex-monitro-plugin/stack": "workspace:*"
   },
