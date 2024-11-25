@@ -4,7 +4,7 @@ import {
     type AnyObject,
     _global,
 } from "@vertex-monitro/core"
-import {parse} from "@vertex/erralyze"
+import { parse } from "@vertex/erralyze"
 
 export interface ResourceTarget {
     src?: string;
