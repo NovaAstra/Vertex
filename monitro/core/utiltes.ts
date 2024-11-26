@@ -83,7 +83,26 @@ export function safeStringify(obj: object): string {
 }
 
 export function sendByBeacon<D extends AnyObject>(url: string, data: D): boolean {
-    return navigator.sendBeacon(url, safeStringify(data))
+    if (!url || typeof url !== 'string') {
+        console.error('Invalid URL');
+        return false;
+      }
+      if (!data || typeof data !== 'object') {
+        console.error('Invalid data');
+        return false;
+      }
+      const formData = new FormData();
+      for (const key in data) {
+        if (Object.prototype.hasOwnProperty.call(data, key)) {
+          let value = data[key] as any;
+          if (typeof value !== 'string' && !(value instanceof Blob)) {
+            value = JSON.stringify(value);
+          }
+          formData.append(key, value);
+        }
+      }
+
+    return navigator.sendBeacon(url, formData)
 }
 
 export function sendByImage<D extends AnyObject>(url: string, data: D): Promise<void> {
