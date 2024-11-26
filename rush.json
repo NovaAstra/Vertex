@@ -59,6 +59,10 @@
       "projectFolder": "monitro/plugins/vue3"
     },
     {
+      "packageName": "@vertex-monitro-plugin/vue2",
+      "projectFolder": "monitro/plugins/vue2"
+    },
+    {
       "packageName": "@vertex-monitro-plugin/xhr",
       "projectFolder": "monitro/plugins/xhr"
     },

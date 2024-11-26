@@ -16,6 +16,7 @@ import {
 import { StackPlugin } from "@vertex-monitro-plugin/stack"
 import { PromisePlugin } from "@vertex-monitro-plugin/promise"
 import { PerformancePlugin } from "@vertex-monitro-plugin/performance"
+import { Vue2Plugin } from "@vertex-monitro-plugin/vue2"
 
 
 export type BrowserPlugin = BasePlugin
@@ -59,18 +60,18 @@ export class BrowserClient extends Client {
 
     public async send(url: string, data: AnyObject) {
         console.log(data)
-        // const type = sendType(data)
-        // switch (type) {
-        //     case 1:
-        //         sendByBeacon(url, data)
-        //         break
-        //     case 2:
-        //         sendByImage(url, data)
-        //         break
-        //     default:
-        //         sendByXML(url, data)
-        //         break
-        // }
+        const type = sendType(data)
+        switch (type) {
+            case 1:
+                sendByBeacon(url, data)
+                break
+            case 2:
+                sendByImage(url, data)
+                break
+            default:
+                sendByXML(url, data)
+                break
+        }
     }
 }
 
@@ -80,7 +81,10 @@ export function MonitroClient(options: BrowserOptions) {
     const plugins: BrowserPlugin[] = [
         StackPlugin(),
         PromisePlugin(),
-        PerformancePlugin()
+        PerformancePlugin(),
+        Vue2Plugin({
+            vue: (options as any).vue
+        })
     ]
 
     if (Array.isArray(options.plugins)) plugins.push(...options.plugins)

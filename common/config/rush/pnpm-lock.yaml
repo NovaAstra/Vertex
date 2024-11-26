@@ -38,6 +38,9 @@ importers:
       '@vertex-monitro-plugin/stack':
         specifier: workspace:*
         version: link:../../plugins/stack
+      '@vertex-monitro-plugin/vue2':
+        specifier: workspace:*
+        version: link:../../plugins/vue2
       '@vertex-monitro/core':
         specifier: workspace:*
         version: link:../../core
@@ -141,6 +144,15 @@ importers:
       '@types/lodash-es':
         specifier: ~4.17.12
         version: 4.17.12
+
+  ../../monitro/plugins/vue2:
+    dependencies:
+      '@vertex-monitro/core':
+        specifier: workspace:*
+        version: link:../../core
+      '@vertex/erralyze':
+        specifier: workspace:*
+        version: link:../../../packages/erralyze
 
   ../../monitro/plugins/vue3:
     dependencies:

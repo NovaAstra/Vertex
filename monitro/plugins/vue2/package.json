@@ -1,0 +1,10 @@
+{
+    "name": "@vertex-monitro-plugin/vue2",
+    "type": "module",
+    "version": "0.0.1",
+    "main": "index.ts",
+    "dependencies": {
+        "@vertex/erralyze": "workspace:*",
+        "@vertex-monitro/core": "workspace:*"
+    }
+}

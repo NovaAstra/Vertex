@@ -11,7 +11,8 @@
     "lodash-es": "~4.17.21",
     "@vertex-monitro-plugin/promise": "workspace:*",
     "@vertex-monitro-plugin/stack": "workspace:*",
-    "@vertex-monitro-plugin/performance": "workspace:*"
+    "@vertex-monitro-plugin/performance": "workspace:*",
+    "@vertex-monitro-plugin/vue2": "workspace:*"
   },
   "devDependencies": {
     "vite": "^5.4.11",

@@ -1,0 +1,14 @@
+{
+    "compilerOptions": {
+        "target": "ESNext",
+        "module": "ESNext",
+        "exactOptionalPropertyTypes": true,
+        "esModuleInterop": true,
+        "moduleResolution": "Bundler",
+        "importHelpers": true,
+        "lib": [
+            "ESNext"
+        ],
+        "strict": true
+    }
+}
