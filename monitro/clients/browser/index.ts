@@ -59,7 +59,20 @@ export class BrowserClient extends Client {
 
     public async send(url: string, data: AnyObject) {
         console.log(data)
-        const type = sendType({errorInfo: JSON.stringify(data), page:window.location.href})
+        const type = sendType(
+            {
+                "tenantCode": "",
+                "username": "",
+                "company": "",
+                "errorInfo": JSON.stringify(data),
+                "errorType": "client error",
+                "errorCode": 500,
+                "page": window.location.href,
+                "httpStatusCode": 200,
+                "url": window.location.href,
+                "email": ""
+            }
+        )
         switch (type) {
             case 1:
                 sendByBeacon(url, data)
