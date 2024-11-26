@@ -24,7 +24,7 @@ export function Vue2Plugin(options: AnyObject = {}): BasePlugin {
                     api.next(error)
                 }
         },
-        transform(event: AnyObject) {
+        transform(event: any) {
             return parse(event)
         }
     }

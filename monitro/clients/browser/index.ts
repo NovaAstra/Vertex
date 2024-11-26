@@ -15,7 +15,6 @@ import {
 } from "@vertex-monitro/core"
 import { StackPlugin } from "@vertex-monitro-plugin/stack"
 import { PromisePlugin } from "@vertex-monitro-plugin/promise"
-import { PerformancePlugin } from "@vertex-monitro-plugin/performance"
 import { Vue2Plugin } from "@vertex-monitro-plugin/vue2"
 
 
@@ -60,7 +59,7 @@ export class BrowserClient extends Client {
 
     public async send(url: string, data: AnyObject) {
         console.log(data)
-        const type = sendType(data)
+        const type = sendType({errorInfo: JSON.stringify(data), page:window.location.href})
         switch (type) {
             case 1:
                 sendByBeacon(url, data)
@@ -81,7 +80,6 @@ export function MonitroClient(options: BrowserOptions) {
     const plugins: BrowserPlugin[] = [
         StackPlugin(),
         PromisePlugin(),
-        PerformancePlugin(),
         Vue2Plugin({
             vue: (options as any).vue
         })
