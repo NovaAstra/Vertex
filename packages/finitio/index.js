@@ -40,5 +40,10 @@ const config = {
 
 const state = defineStates(config)
 
-console.log(state.Loaded(22))
+function createStateMachine(transitions, initialStates) {
 
+}
+
+function createFactoryMachine(states, transitions, init) {
+
+}
