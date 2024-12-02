@@ -41,9 +41,23 @@ const config = {
 const state = defineStates(config)
 
 function createStateMachine(transitions, initialStates) {
+    let lastChange = {
+        type: "__initialize",
+        to: initialState,
+    }
 
+    const machine = {
+        transitions
+    }
+
+    return machine
 }
 
 function createFactoryMachine(states, transitions, init) {
-
+    const initialState = (
+        typeof init === "string" ? states[init]({}) : init
+    );
+    const machine = createStateMachine(transitions, initialState);
+    Object.assign(machine, {})
+    return machine
 }
