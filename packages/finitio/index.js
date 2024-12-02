@@ -68,18 +68,81 @@ function createFactoryMachine(states, transitions, init) {
     const machine = createStateMachine(transitions, initialState);
     Object.assign(machine, {
         states,
-        resolve: () => {
-
-        }
     })
     return machine
 }
 
-const config = {
-    Idle: undefined,
-    Loading: { id: 1 },
-    Loaded: (data) => ({ data }),
-    Error: (error) => ({ error }),
+function createApi(machine) {
+    const { states, transitions } = machine;
+    const createSender =
+        (eventKey) =>
+            (...params) => {
+                return machine.send(eventKey, ...(params));
+            };
+
+    const transitioners = {};
+    const events = {}
+    for (const stateKey in states) {
+        const transitionKey = stateKey
+        const stateTransitions = transitions[transitionKey];
+        transitioners[transitionKey] = {};
+
+        if (stateTransitions) {
+            for (const eventKey in stateTransitions) {
+                const sender = createSender(eventKey);
+                transitioners[transitionKey][eventKey] = sender;
+                events[eventKey] ||= sender;
+            }
+        }
+    }
+
+    return events;
 }
 
-const state = defineStates(config)
+function withApi(target) {
+    const enhanced = target
+    if (enhanced.api) {
+        return enhanced;
+    }
+    return Object.assign(target, {
+        api: createApi(enhanced),
+    })
+}
+
+const config = {
+    Initial: { key: "initial" },
+    Done: (ok, msg) => ({ ok, msg }),
+}
+
+const makeStates = () =>
+    defineStates(config);
+
+const makeMachine = () => {
+    const states = makeStates();
+
+    const m = createFactoryMachine(
+        states,
+        {
+            Initial: {
+                done: "Done",
+                doneFunc: (done) =>
+                    states[done === 100 ? "Done" : "Initial"](true),
+                doneAdvFunc:
+                    (done) =>
+                        ({ type }) => {
+                            return states[done === "DONE" ? "Done" : "Initial"](
+                                type === "doneAdvFunc",
+                            );
+                        },
+            },
+            Done: {},
+        },
+        "Initial",
+    )
+    const m2 = withApi(m)
+    return m2
+}
+
+const machine = makeMachine();
+
+console.log(machine.api)
