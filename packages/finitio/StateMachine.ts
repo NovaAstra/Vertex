@@ -5,6 +5,10 @@ export type MachineSchema<
     Event,
 > = StateNodeSchema<Context, Event>
 
-export class StateMachine {
+export class StateMachine<Context, Event> {
+    public constructor(
+        public schema: MachineSchema<Context, Event>
+    ) {
 
+    }
 }
