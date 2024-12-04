@@ -1,9 +1,7 @@
-export type StateNodeSchemas<
+export type StateNodes<
     Context,
     Event,
-> = {
-        [K in string]: StateNode<Context, Event>;
-    }
+> = Record<string, StateNode<Context, Event>>
 
 export interface StateNodeSchema<
     Context,
@@ -23,7 +21,7 @@ export interface StateNodeOptions<Context, Event> {
 export class StateNode<Context, Event> {
     public description?: string;
 
-    public states: StateNodeSchemas<Context, Event>;
+    public states: StateNodes<Context, Event>;
 
     public constructor(
         public schema: StateNodeSchema<Context, Event>,
