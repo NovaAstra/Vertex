@@ -8,6 +8,8 @@ export type MachineSchema<
 export class StateMachine<Context, Event> {
     public id: string;
 
+    public version?: string;
+
     public constructor(
         public schema: MachineSchema<Context, Event>
     ) { }
