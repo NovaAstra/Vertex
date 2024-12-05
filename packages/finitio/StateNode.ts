@@ -3,6 +3,14 @@ export type StateNodes<
     Event,
 > = Record<string, StateNode<Context, Event>>
 
+export interface StateNodeDefinition<
+    Context,
+    Event,
+> {
+    id: string;
+    version?: string | undefined;
+}
+
 export interface StateNodeSchema<
     Context,
     Event,
@@ -28,6 +36,14 @@ export class StateNode<Context, Event> {
         public readonly options: StateNodeOptions<Context, Event>
     ) {
         this.description = schema.description;
+    }
+
+    public get definition() {
+        return
+    }
+
+    public toJSON() {
+        return this.definition;
     }
 }
 

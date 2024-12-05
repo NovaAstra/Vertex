@@ -1,9 +1,12 @@
-import { StateNodeSchema } from "./StateNode"
+import { StateNodeSchema, StateNodeDefinition } from "./StateNode"
 
 export type MachineSchema<
     Context,
     Event,
 > = StateNodeSchema<Context, Event>
+
+export interface StateMachineDefinition<Context, Event>
+    extends StateNodeDefinition<Context, Event> { }
 
 export class StateMachine<Context, Event> {
     public id: string;
@@ -13,4 +16,12 @@ export class StateMachine<Context, Event> {
     public constructor(
         public schema: MachineSchema<Context, Event>
     ) { }
+
+    public get definition() {
+        return
+    }
+
+    public toJSON() {
+        return this.definition;
+    }
 }
