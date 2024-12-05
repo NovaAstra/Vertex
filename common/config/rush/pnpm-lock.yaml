@@ -183,7 +183,11 @@ importers:
 
   ../../packages/erralyze: {}
 
-  ../../packages/finitio: {}
+  ../../packages/finitio:
+    dependencies:
+      xstate:
+        specifier: ~5.19.0
+        version: 5.19.0
 
   ../../packages/match:
     dependencies:
@@ -1026,6 +1030,9 @@ packages:
     engines: {node: '>=8'}
     hasBin: true
 
+  xstate@5.19.0:
+    resolution: {integrity: sha512-Juh1MjeRaVWr1IRxXYvQMMRFMrei6vq6+AfP6Zk9D9YV0ZuvubN0aM6s2ITwUrq+uWtP1NTO8kOZmsM/IqeOiQ==}
+
   yallist@4.0.0:
     resolution: {integrity: sha512-3wdGidZyq5PB084XLES5TpOSRA3wjXAlIWMhum2kRcv/41Sn2emQ0dycQW4uZXLejwKvg6EsvbdlVL+FYEct7A==}
 
@@ -1810,5 +1817,7 @@ snapshots:
     dependencies:
       siginfo: 2.0.0
       stackback: 0.0.2
+
+  xstate@5.19.0: {}
 
   yallist@4.0.0: {}
