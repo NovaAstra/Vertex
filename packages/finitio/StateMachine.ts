@@ -15,7 +15,8 @@ export class StateMachine<Context, Event> {
 
     public constructor(
         public schema: MachineSchema<Context, Event>
-    ) { }
+    ) {
+    }
 
     public get definition() {
         return

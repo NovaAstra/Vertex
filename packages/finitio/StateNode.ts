@@ -1,20 +1,11 @@
-export type StateNodes<
-    Context,
-    Event,
-> = Record<string, StateNode<Context, Event>>
+import { StateMachine } from "./StateMachine"
 
-export interface StateNodeDefinition<
-    Context,
-    Event,
-> {
+export interface StateNodeDefinition<Context, Event> {
     id: string;
     version?: string | undefined;
 }
 
-export interface StateNodeSchema<
-    Context,
-    Event,
-> {
+export interface StateNodeSchema<Context, Event> {
     id?: string | undefined;
 
     name?: string;
@@ -27,9 +18,11 @@ export interface StateNodeOptions<Context, Event> {
 }
 
 export class StateNode<Context, Event> {
+    public id: string;
+
     public description?: string;
 
-    public states: StateNodes<Context, Event>;
+    public machine: StateMachine<Context, Event>
 
     public constructor(
         public schema: StateNodeSchema<Context, Event>,

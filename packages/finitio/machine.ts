@@ -5,3 +5,5 @@ export function createMachine<Context, Event>(
 ) {
     return new StateMachine<Context, Event>(schema)
 }
+
+const machine = createMachine({})
